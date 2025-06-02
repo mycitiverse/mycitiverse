@@ -1,18 +1,36 @@
 // components/UserEventsList.jsx
 
 import { useEffect, useState } from "react";
-import { getUserEvents, deleteUserEvent } from "../utils/storage";
+import { collection, query, where, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const UserEventsList = () => {
+  const [user] = useAuthState(auth);
   const [userEvents, setUserEvents] = useState([]);
 
   useEffect(() => {
-    setUserEvents(getUserEvents());
-  }, []);
+    if (!user) return;
 
-  const handleDelete = (id) => {
-    deleteUserEvent(id);
-    setUserEvents(getUserEvents());
+    const q = query(collection(db, "events"), where("createdBy", "==", user.email));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const eventsData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUserEvents(eventsData);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, "events", id));
+    } catch (error) {
+      console.error("Error deleting event:", error);
+    }
   };
 
   return (
@@ -24,12 +42,14 @@ const UserEventsList = () => {
             className="bg-white shadow-md p-4 rounded-lg border border-gray-200"
           >
             <img
-              src={event.image || "https://via.placeholder.com/300"}
+              src={event.imageUrl || "https://via.placeholder.com/300"}
               alt={event.title}
               className="w-full h-40 object-cover rounded-md mb-2"
             />
             <h2 className="text-xl font-semibold">{event.title}</h2>
-            <p className="text-gray-600 text-sm">{event.date} at {event.time}</p>
+            <p className="text-gray-600 text-sm">
+              {event.date} at {event.time}
+            </p>
             <p className="text-gray-700 mt-2">{event.description}</p>
             <button
               onClick={() => handleDelete(event.id)}
@@ -40,7 +60,9 @@ const UserEventsList = () => {
           </div>
         ))
       ) : (
-        <p className="text-center text-gray-500 col-span-3">No user events found.</p>
+        <p className="text-center text-gray-500 col-span-3">
+          No user events found.
+        </p>
       )}
     </div>
   );

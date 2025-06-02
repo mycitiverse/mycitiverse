@@ -11,6 +11,7 @@ import EventDetails from './pages/EventDetails';
 import CityFeedPage from './pages/CityFeedPage';
 import AddCityUpdate from './pages/AddCityUpdate';
 import LoginPage from "./pages/LoginPage";
+import UserEventsList from "./components/UserEventsList";
 
 function HomePage() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/city-feed" element={<CityFeedPage />} />
         <Route path="/add-update" element={<AddCityUpdate />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/my-events" element={<UserEventsList />} />
       
       </Routes>
       <Footer />

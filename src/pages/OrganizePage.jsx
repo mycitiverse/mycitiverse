@@ -20,11 +20,16 @@ export default function OrganizePage() {
     imageUrl: ''
   });
 
-  // Redirect to login if user not found
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"))
-    if (!user) window.location.href = "/login"
-  }, [])
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (!userData) {
+      window.location.href = "/login";
+    } else {
+      setUser(userData);
+    }
+  }, []);
 
   const categories = [
     'Meeting',
@@ -58,15 +63,20 @@ export default function OrganizePage() {
       return;
     }
 
+    if (!user?.email) {
+      alert("User email not found. Please log in again.");
+      return;
+    }
+
     try {
       await addDoc(collection(db, "events"), {
         ...formData,
-        createdAt: Timestamp.now()
+        createdAt: Timestamp.now(),
+        createdBy: user.email
       });
 
       alert("Event saved successfully!");
 
-      // Reset form
       setFormData({
         title: '',
         description: '',

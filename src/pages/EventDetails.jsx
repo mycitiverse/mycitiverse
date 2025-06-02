@@ -3,55 +3,34 @@ import { useParams } from 'react-router-dom';
 import { Calendar, MapPin, Tag } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import Button from "../components/ui/Button";
-import { getUserEvents } from '../utils/storage';
-
-const mockEvents = [
-  {
-    id: '1',
-    title: 'Tech Conference 2023',
-    description: 'Annual technology conference featuring the latest innovations in software development, AI, and cloud computing.',
-    date: '2023-11-15',
-    time: '09:00 AM - 05:00 PM',
-    location: 'Convention Center, San Francisco',
-    category: 'Workshops',
-    imageUrl: '/tech-conference.jpg'
-  },
-  {
-    id: '2',
-    title: 'Music Festival',
-    description: 'Three-day outdoor music festival featuring top artists from around the world.',
-    date: '2023-12-10',
-    time: '12:00 PM - 11:00 PM',
-    location: 'Central Park, New York',
-    category: 'Music',
-    imageUrl: '/music-festival.jpg'
-  },
-  {
-    id: '3',
-    title: 'Food & Wine Expo',
-    description: 'Experience gourmet food and fine wines from local and international vendors.',
-    date: '2023-10-20',
-    time: '10:00 AM - 08:00 PM',
-    location: 'Downtown Expo Hall, Chicago',
-    category: 'Workshops',
-    imageUrl: '/food-expo.jpg'
-  }
-];
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 export default function EventDetails() {
-  const { eventId } = useParams(); // get ID from URL
+  const { eventId } = useParams(); // Get ID from URL
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userEvents = getUserEvents();
-    const allEvents = [...mockEvents, ...userEvents];
-    const foundEvent = allEvents.find(e => String(e.id) === eventId);
+    const fetchEvent = async () => {
+      try {
+        const docRef = doc(db, "events", eventId);
+        const docSnap = await getDoc(docRef);
 
-    setTimeout(() => {
-      setEvent(foundEvent || null);
-      setLoading(false);
-    }, 300); // simulate delay
+        if (docSnap.exists()) {
+          setEvent({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          setEvent(null);
+        }
+      } catch (error) {
+        console.error("Error fetching event:", error);
+        setEvent(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvent();
   }, [eventId]);
 
   if (loading) {
@@ -100,7 +79,7 @@ export default function EventDetails() {
                       weekday: 'long',
                       year: 'numeric',
                       month: 'long',
-                      day: 'numeric'
+                      day: 'numeric',
                     })}
                     <br />
                     {event.time}
