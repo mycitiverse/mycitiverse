@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram } from "lucide-react"
+import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -27,6 +27,14 @@ export default function Footer() {
             <a
             href="https://www.instagram.com/mycitiverse" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-gray-400 hover:text-white transition-colors">
               <Instagram className="w-6 h-6" />
+            </a>
+            <a
+            href="https://www.linkedin.com/company/mycitiverse" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-gray-400 hover:text-white transition-colors">
+              <Linkedin className="w-6 h-6" />
+            </a>
+            <a
+            href="https://www.youtube.com/@MyCitiverse" target="_blank" rel="noopener noreferrer" aria-label="Youtube" className="text-gray-400 hover:text-white transition-colors">
+              <Youtube className="w-6 h-6" />
             </a>
           </div>
         </div>
