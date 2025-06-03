@@ -8,8 +8,11 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { db } from "../firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { useAuth } from '../contexts/AuthContext';
 
 export default function OrganizePage() {
+  const { currentUser } = useAuth();
+  console.log("Logged in user:", currentUser?.uid);
   const [formData, setFormData] = useState({
     title: '',
     description: '',

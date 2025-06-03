@@ -5,8 +5,12 @@ import { Label } from "../components/ui/Label"
 import Textarea from "../components/ui/Textarea"
 import * as Select from '@radix-ui/react-select'
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
+import { useAuth } from '../contexts/AuthContext';
 
 export default function AddCityUpdate() {
+  const { currentUser } = useAuth();
+  console.log("Logged in user:", currentUser?.uid);
+  
   const [formData, setFormData] = useState({
     title: '',
     category: '',

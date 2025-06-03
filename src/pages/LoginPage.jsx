@@ -2,6 +2,7 @@
 import React from "react";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
+import { useAuth } from '../contexts/AuthContext';
 
 const LoginPage = () => {
   const handleLogin = async () => {
@@ -14,6 +15,9 @@ const LoginPage = () => {
       console.error("Login Error:", error.message);
     }
   };
+
+const { currentUser } = useAuth();  
+console.log("Logged in user:", currentUser?.uid);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50">

@@ -5,11 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../co
 import Button from "../components/ui/Button";
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useAuth } from '../contexts/AuthContext';
+import { saveViewedCategory } from "../firebaseUsers";
 
 export default function EventDetails() {
-  const { eventId } = useParams(); // Get ID from URL
+  const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { currentUser } = useAuth();
+
+  console.log("Logged in user:", currentUser?.uid);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -18,7 +23,16 @@ export default function EventDetails() {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setEvent({ id: docSnap.id, ...docSnap.data() });
+          const eventData = { id: docSnap.id, ...docSnap.data() };
+          setEvent(eventData);
+
+          // ✅ Save viewed category
+          if (currentUser && eventData.category) {
+            // use .then() because we cannot use 'await' directly in useEffect's inner scope
+            saveViewedCategory(currentUser.uid, eventData.category)
+              .then(() => console.log("Category saved"))
+              .catch((err) => console.error("Error saving category:", err));
+          }
         } else {
           setEvent(null);
         }
@@ -31,7 +45,7 @@ export default function EventDetails() {
     };
 
     fetchEvent();
-  }, [eventId]);
+  }, [eventId, currentUser]);
 
   if (loading) {
     return (

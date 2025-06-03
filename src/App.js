@@ -12,6 +12,7 @@ import CityFeedPage from './pages/CityFeedPage';
 import AddCityUpdate from './pages/AddCityUpdate';
 import LoginPage from "./pages/LoginPage";
 import UserEventsList from "./components/UserEventsList";
+import { AuthProvider } from './contexts/AuthContext';
 
 function HomePage() {
   return (
@@ -25,7 +26,7 @@ function HomePage() {
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -39,7 +40,7 @@ function App() {
       
       </Routes>
       <Footer />
-    </>
+    </AuthProvider>
   );
 }
 

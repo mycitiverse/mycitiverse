@@ -4,6 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
+import { createUserDocIfNotExists } from "./firebaseUsers";
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    createUserDocIfNotExists(user);
+  }
+});
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
