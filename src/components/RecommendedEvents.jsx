@@ -6,6 +6,7 @@ export default function RecommendedEvents({ allEvents, userCategories }) {
 
   // 🧠 Step 2: Filter & rank events
   useEffect(() => {
+    if (!Array.isArray(userCategories) || !Array.isArray(allEvents)) return;
     if (!userCategories.length || !allEvents.length) return;
 
     const interestCounts = {};

@@ -102,7 +102,7 @@ export default function EventsPage() {
       <h1 className="text-3xl font-bold mb-8">Explore Events in Your City</h1>
 
       {/* 🎯 Recommended Events Section */}
-      {recommendedEvents.length > 0 && (
+      {Array.isArray(recommendedEvents) && recommendedEvents.length > 0 && (
         <RecommendedEvents events={recommendedEvents} />
       )}
 

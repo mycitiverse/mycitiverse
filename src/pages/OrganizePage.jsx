@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
-import Button from "../components/ui/Button"
-import { Input } from "../components/ui/Input"
-import Textarea from "../components/ui/Textarea"
-import { Label } from "../components/ui/Label"
-import * as Select from '@radix-ui/react-select'
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
+import { useState, useEffect } from 'react';
+import Button from "../components/ui/Button";
+import { Input } from "../components/ui/Input";
+import Textarea from "../components/ui/Textarea";
+import { Label } from "../components/ui/Label";
+import * as Select from '@radix-ui/react-select';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { db } from "../firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { useAuth } from '../contexts/AuthContext';
@@ -13,6 +13,7 @@ import { useAuth } from '../contexts/AuthContext';
 export default function OrganizePage() {
   const { currentUser } = useAuth();
   console.log("Logged in user:", currentUser?.uid);
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -20,7 +21,10 @@ export default function OrganizePage() {
     time: '',
     location: '',
     category: '',
-    imageUrl: ''
+    imageUrl: '',
+    isPaid: false,
+    price: 0,
+    maxSeats: 0
   });
 
   const [user, setUser] = useState(null);
@@ -44,10 +48,10 @@ export default function OrganizePage() {
   ];
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -74,6 +78,9 @@ export default function OrganizePage() {
     try {
       await addDoc(collection(db, "events"), {
         ...formData,
+        price: formData.isPaid ? Number(formData.price) : 0,
+        maxSeats: formData.isPaid ? Number(formData.maxSeats) : 0,
+        bookedUsers: [],
         createdAt: Timestamp.now(),
         createdBy: user.email
       });
@@ -87,7 +94,10 @@ export default function OrganizePage() {
         time: '',
         location: '',
         category: '',
-        imageUrl: ''
+        imageUrl: '',
+        isPaid: false,
+        price: 0,
+        maxSeats: 0
       });
     } catch (error) {
       console.error("Error adding event to Firestore:", error);
@@ -227,6 +237,52 @@ export default function OrganizePage() {
                 placeholder="https://example.com/image.jpg"
               />
             </div>
+
+            {/* Paid Event Fields */}
+            <div className="space-y-2">
+              <Label htmlFor="isPaid">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="isPaid"
+                    name="isPaid"
+                    checked={formData.isPaid}
+                    onChange={handleChange}
+                  />
+                  <span>Is this a paid event?</span>
+                </div>
+              </Label>
+            </div>
+
+            {formData.isPaid && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="price">Ticket Price (INR)</Label>
+                  <Input
+                    id="price"
+                    name="price"
+                    type="number"
+                    value={formData.price}
+                    onChange={handleChange}
+                    min="0"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="maxSeats">Max Seats</Label>
+                  <Input
+                    id="maxSeats"
+                    name="maxSeats"
+                    type="number"
+                    value={formData.maxSeats}
+                    onChange={handleChange}
+                    min="1"
+                    required
+                  />
+                </div>
+              </>
+            )}
 
             <div className="pt-4">
               <Button type="submit" className="w-full">

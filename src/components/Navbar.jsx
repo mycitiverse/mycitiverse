@@ -52,7 +52,7 @@ export default function Navbar() {
               to="/"
               className="flex items-center space-x-2">
               <img src="/mylogo.png" alt="MyCitiverse Logo" className="h-10 w-auto" />
-              <span className="text-white font-bold text-xl hidden sm:inline">MyCitiverse</span>
+              <span className="text-white font-bold text-xl">MyCitiverse</span>
             </Link>
           </div>
 
