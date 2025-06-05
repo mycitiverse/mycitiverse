@@ -24,7 +24,7 @@ console.log("Logged in user:", currentUser?.uid);
       <h1 className="text-3xl font-bold mb-6">Welcome to Citiverse</h1>
       <button
         onClick={handleLogin}
-        className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow hover:bg-blue-700"
+        className="bg-yellow-400 text-white px-6 py-3 rounded-xl shadow hover:bg-yellow-500"
       >
         Sign in with Google
       </button>

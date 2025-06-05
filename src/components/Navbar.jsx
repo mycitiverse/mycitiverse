@@ -51,8 +51,8 @@ export default function Navbar() {
             <Link
               to="/"
               className="flex items-center space-x-2">
-              <img src="/mylogo.png" alt="MyCitiverse Logo" className="h-10 w-auto" />
-              <span className="text-white font-bold text-xl">MyCitiverse</span>
+              <img src="/mylogo.png" alt="MyCitiverse Logo" className="h-14 w-auto" />
+              <span className="text-white font-bold text-2xl">MyCitiverse</span>
             </Link>
           </div>
 
@@ -62,7 +62,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 to={link.href}
-                className="text-white hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                className="text-white hover:bg-yellow-500 px-3 py-2 rounded-md text-l font-medium transition-colors duration-200"
               >
                 {link.name}
               </Link>
@@ -71,14 +71,14 @@ export default function Navbar() {
             {user ? (
               <button
                 onClick={handleLogout}
-                className="text-white bg-red-600 hover:bg-red-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                className="text-white bg-red-600 hover:bg-red-700 px-3 py-2 rounded-md text-l font-medium transition-colors duration-200"
               >
                 Logout
               </button>
             ) : (
               <Link
                 to="/login"
-                className="text-white hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                className="text-white hover:bg-yellow-500 px-3 py-2 rounded-md text-l font-medium transition-colors duration-200"
               >
                 Login
               </Link>
