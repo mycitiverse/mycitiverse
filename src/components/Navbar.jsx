@@ -43,7 +43,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-blue-600 shadow-md">
+    <nav className="sticky top-0 z-50 bg-yellow-400 shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -62,7 +62,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 to={link.href}
-                className="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                className="text-white hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
               >
                 {link.name}
               </Link>
@@ -78,7 +78,7 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                className="text-white hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
               >
                 Login
               </Link>
@@ -91,7 +91,7 @@ export default function Navbar() {
               variant="ghost"
               size="icon"
               onClick={toggleMenu}
-              className="text-white hover:bg-blue-700 focus:outline-none"
+              className="text-white hover:bg-yellow-500 focus:outline-none"
             >
               <Menu className="h-6 w-6" />
             </Button>
@@ -100,14 +100,14 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden bg-blue-600 pb-3">
+          <div className="md:hidden bg-yellow-400 pb-3">
             <div className="px-2 pt-2 space-y-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.href}
                   onClick={closeMenu}
-                  className="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium"
+                  className="block text-white hover:bg-yellow-500 px-3 py-2 rounded-md text-base font-medium"
                 >
                   {link.name}
                 </Link>
@@ -127,7 +127,7 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   onClick={closeMenu}
-                  className="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium"
+                  className="block text-white hover:bg-yellow-500 px-3 py-2 rounded-md text-base font-medium"
                 >
                   Login
                 </Link>

@@ -2,19 +2,19 @@ import Button from "./ui/Button"
 
 export default function HeroSection() {
   return (
-    <section className="relative bg-gradient-to-br from-blue-600 to-indigo-800 text-white py-20 md:py-32">
+    <section className="relative bg-gradient-to-br from-yellow-300 to-yellow-600 text-white py-20 md:py-32">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto space-y-6">
           {/* Headline */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
             MyCitiverse
           </h1>
-          <h2 className="text-2xl md:text-2xl lg:text-3xl font-bold leading-tight" style={{color: 'yellow'}}>
+          <h2 className="text-2xl md:text-2xl lg:text-3xl font-bold leading-tight" style={{color: 'red'}}>
             (Coming Soon)
           </h2>
           
           {/* Subheading */}
-          <p className="text-lg md:text-xl text-blue-100 max-w-2xl">
+          <p className="text-lg md:text-xl text-white max-w-2xl">
             One App, Every Corner of Your City
           </p>
           
