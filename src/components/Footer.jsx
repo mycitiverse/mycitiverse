@@ -17,7 +17,7 @@ export default function Footer() {
           {/* Social links */}
           <div className="flex space-x-6">
             <a
-            href="#!" aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors">
+            href="https://facebook.com/MyCitiverse" aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors">
               <Facebook className="w-6 h-6" />
             </a>
             <a
