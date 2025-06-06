@@ -20,7 +20,7 @@ import CommunityHallPage from "./pages/CommunityHallPage";
 import BookHallPage from "./pages/BookHallPage";
 import MyHallBookings from "./pages/MyHallBookings";
 import CityUpdateDetails from "./pages/CityUpdateDetails"
-
+import CommunityHallDetails from "./components/CommunityHallDetails";
 
 function HomePage() {
   return (
@@ -39,7 +39,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/events" element={<EventsPage />} />
-        <Route path="/community-halls" element={<CommunityHallPage />} />
+        <Route path="/community-hall" element={<CommunityHallPage />} />
         <Route path="/organize" element={<AdminRoute><ProtectedRoute> <OrganizePage /> </ProtectedRoute></AdminRoute>} />
         <Route path="/events/:eventId" element={<EventDetails />} />
         <Route path="/add-hall" element={<AdminRoute><ProtectedRoute> <AddCommunityHall /> </ProtectedRoute></AdminRoute>} />
@@ -48,6 +48,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/my-events" element={<UserEventsList />} />
         <Route path="/book-hall/:id" element={<BookHallPage />} />
+        <Route path="/community-hall/:id" element={<CommunityHallDetails />} />
         <Route path="/my-hall-bookings" element={<MyHallBookings />} />
         <Route path="/city-feed/:id" element={<CityUpdateDetails />} />
 

@@ -30,7 +30,7 @@ export default function Navbar() {
     { name: 'Home', href: '/' },
     { name: 'Events', href: '/events' },
     { name: 'City Feed', href: '/city-feed' },
-    { name: 'Community Halls', href: '/community-halls' },
+    { name: 'Community Halls', href: '/community-hall' },
   ];
 
   // Admin-only links

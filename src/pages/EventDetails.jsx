@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';  // added useNavigate
 import { Calendar, MapPin, Tag } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import Button from "../components/ui/Button";
@@ -10,6 +10,7 @@ import { saveViewedCategory } from "../firebaseUsers";
 
 export default function EventDetails() {
   const { eventId } = useParams();
+  const navigate = useNavigate();   // initialize navigate
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
@@ -28,7 +29,6 @@ export default function EventDetails() {
 
           // ✅ Save viewed category
           if (currentUser && eventData.category) {
-            // use .then() because we cannot use 'await' directly in useEffect's inner scope
             saveViewedCategory(currentUser.uid, eventData.category)
               .then(() => console.log("Category saved"))
               .catch((err) => console.error("Error saving category:", err));
@@ -60,7 +60,7 @@ export default function EventDetails() {
       <div className="flex flex-col items-center justify-center h-64">
         <h2 className="text-2xl font-bold mb-4">Event Not Found</h2>
         <p className="text-muted-foreground mb-4">The event you're looking for doesn't exist.</p>
-        <Button variant="outline" onClick={() => window.history.back()}>
+        <Button variant="outline" onClick={() => navigate(-1)}>
           Go Back
         </Button>
       </div>
@@ -69,6 +69,11 @@ export default function EventDetails() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
+      {/* Back to Feed button */}
+      <Button variant="outline" onClick={() => navigate(-1)} className="mb-6">
+        ← Back to Events
+      </Button>
+
       <Card>
         <CardHeader>
           <CardTitle className="text-3xl">{event.title}</CardTitle>
