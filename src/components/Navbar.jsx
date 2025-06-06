@@ -1,46 +1,50 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Button from "./ui/Button";
 import { Menu } from "lucide-react";
 import { Link } from 'react-router-dom';
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
+import { useAuth } from '../contexts/AuthContext';
+import { ADMIN_EMAILS } from '../constants/adminConfig';
+
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const { currentUser } = useAuth();
+  const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
 
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
         localStorage.removeItem("user");
-        setUser(null);
         window.location.href = "/login";
       })
       .catch((error) => console.error("Logout Error:", error));
   };
 
-  const navLinks = [
+  // Base links available to all users (logged in or not)
+  const baseLinks = [
     { name: 'Home', href: '/' },
     { name: 'Events', href: '/events' },
-    { name: 'Organize', href: '/organize' },
     { name: 'City Feed', href: '/city-feed' },
-    { name: 'Add City Update', href: '/add-update' },
+    { name: 'Community Halls', href: '/community-halls' },
   ];
+
+  // Admin-only links
+  const adminLinks = [
+    { name: 'Add City Update', href: '/add-update' },
+    { name: 'Add Community Hall', href: '/add-hall' },
+    { name: 'Organize', href: '/organize' },
+  ];
+
+  // Add "My Bookings" for logged in users
+  const userLinks = currentUser ? [{ name: 'My Bookings', href: '/my-hall-bookings' }] : [];
+
+  // Combine all links
+  const navLinks = [...baseLinks, ...userLinks, ...(isAdmin ? adminLinks : [])];
 
   return (
     <nav className="sticky top-0 z-50 bg-yellow-400 shadow-md">
@@ -48,9 +52,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link
-              to="/"
-              className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-2">
               <img src="/mylogo.png" alt="MyCitiverse Logo" className="h-14 w-auto" />
               <span className="text-white font-bold text-2xl">MyCitiverse</span>
             </Link>
@@ -68,7 +70,7 @@ export default function Navbar() {
               </Link>
             ))}
 
-            {user ? (
+            {currentUser ? (
               <button
                 onClick={handleLogout}
                 className="text-white bg-red-600 hover:bg-red-700 px-3 py-2 rounded-md text-l font-medium transition-colors duration-200"
@@ -113,7 +115,7 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              {user ? (
+              {currentUser ? (
                 <button
                   onClick={() => {
                     closeMenu();
