@@ -4,10 +4,13 @@ import { signInWithPopup } from "firebase/auth";
 import { useAuth } from '../contexts/AuthContext';
 import { doc, setDoc } from "firebase/firestore";
 
+// If the logo is in src/assets
+// import logo from '../assets/logo.png';
+
 const LoginPage = () => {
 
   const saveUserToFirestore = async (user) => {
-    const userRef = doc(db, "users", user.uid);  // Use UID here
+    const userRef = doc(db, "users", user.uid);
 
     await setDoc(userRef, {
       uid: user.uid,
@@ -37,7 +40,15 @@ const LoginPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
-      <h1 className="text-3xl font-bold mb-6">Welcome to Citiverse</h1>
+      {/* Company Logo */}
+      <img 
+        src="/mylogo.png" // or use {logo} if imported
+        alt="MyCitiverse Logo"
+        className="w-32 h-32 mb-4" // Adjust size as needed
+      />
+      
+      <h1 className="text-3xl font-bold mb-6">Welcome to MyCitiverse</h1>
+      
       <button
         onClick={handleLogin}
         className="bg-yellow-400 text-white px-6 py-3 rounded-xl shadow hover:bg-yellow-500"

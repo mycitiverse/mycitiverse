@@ -138,6 +138,7 @@ export default function EventsPage() {
                   description={event.description}
                   category={event.category}
                   imageUrl={event.imageUrl}
+                  price={event.price}
                 />
               ))}
             </div>

@@ -9,6 +9,7 @@ export function EventCard({
   description,
   imageUrl,
   category,
+  price,
   onDelete,
   isUserEvent = false,
 }) {
@@ -28,15 +29,37 @@ export function EventCard({
             </div>
           )}
         </div>
+
         <CardContent className="p-6">
           <h2 className="text-xl font-bold mb-2">{title}</h2>
-          <p className="text-gray-500 mb-1">{date}</p>
-          <p className="text-gray-500 mb-4">{location}</p>
-          <p className="text-gray-700 mb-6">{description}</p>
+          <p className="text-gray-500 text-sm mb-1">
+            📅 {new Date(date).toDateString()}
+          </p>
+          <p className="text-gray-500 text-sm mb-1">📍 {location}</p>
+          <p className="text-gray-700 text-sm mb-3 line-clamp-2">{description}</p>
+
+          {/* Show Category and Price */}
+          <div className="text-sm text-gray-600 mb-2">
+            <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full mr-2">
+              {category || "Uncategorized"}
+            </span>
+            <span className="inline-block text-green-600 font-medium">
+              ₹{price || 0}
+            </span>
+          </div>
+
+          {/* Book Event Button (for visual clarity) */}
+          <div className="mt-4">
+            <span className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded">
+              Book Event
+            </span>
+          </div>
+
+          {/* Optional delete button for user events */}
           {isUserEvent && (
             <button
               onClick={(e) => {
-                e.preventDefault(); // Prevent card click navigation
+                e.preventDefault(); // Prevent navigation
                 onDelete(id);
               }}
               className="absolute top-2 right-2 text-sm text-red-500 hover:text-red-700"

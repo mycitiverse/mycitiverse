@@ -21,6 +21,8 @@ import BookHallPage from "./pages/BookHallPage";
 import MyHallBookings from "./pages/MyHallBookings";
 import CityUpdateDetails from "./pages/CityUpdateDetails"
 import CommunityHallDetails from "./components/CommunityHallDetails";
+import MyEvents from "./pages/MyEvents";
+import HallBookingsDashboard from "./pages/HallBookingsDashboard";
 
 function HomePage() {
   return (
@@ -51,6 +53,9 @@ function App() {
         <Route path="/community-hall/:id" element={<CommunityHallDetails />} />
         <Route path="/my-hall-bookings" element={<MyHallBookings />} />
         <Route path="/city-feed/:id" element={<CityUpdateDetails />} />
+        <Route path="/my-events" element={<MyEvents />} />
+        <Route path="/hall-dashboard" element={<HallBookingsDashboard />} />
+
 
       
       </Routes>

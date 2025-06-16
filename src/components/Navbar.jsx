@@ -38,6 +38,8 @@ export default function Navbar() {
     { name: 'Add City Update', href: '/add-update' },
     { name: 'Add Community Hall', href: '/add-hall' },
     { name: 'Organize', href: '/organize' },
+    { name: 'My Events', href: '/my-events' },
+    { name: 'Hall Booking Dashboard', href: '/hall-dashboard' },
   ];
 
   // Add "My Bookings" for logged in users

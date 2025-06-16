@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { doc, getDoc, addDoc, collection } from "firebase/firestore";
@@ -42,24 +42,32 @@ const BookHallPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!hall) return alert("Hall data is still loading. Try again.");
+
     if (purpose === "Others" && !otherPurpose.trim()) {
-      alert("Please specify the purpose of booking.");
-      return;
+      return alert("Please specify the purpose of booking.");
+    }
+
+    if (isNaN(attendees) || Number(attendees) <= 0) {
+      return alert("Please enter a valid number of attendees.");
     }
 
     try {
       await addDoc(collection(db, "hallBookings"), {
         hallId: id,
         hallName: hall.name,
+        userId: currentUser.uid,
         userEmail: currentUser.email,
-        date,
-        time,
-        personName,
-        contactInfo,
+        date: date.trim(),
+        time: time.trim(),
+        personName: personName.trim(),
+        contactInfo: contactInfo.trim(),
         attendees: Number(attendees),
-        purpose: purpose === "Others" ? otherPurpose : purpose,
-        notes,
+        purpose: purpose === "Others" ? otherPurpose.trim() : purpose,
+        notes: notes.trim(),
         totalAmount: hall.pricePerPlate * Number(attendees),
+        paymentStatus: "Paid",
+        status: "Confirmed",
         createdAt: new Date(),
       });
       alert("Booking confirmed!");
@@ -70,7 +78,6 @@ const BookHallPage = () => {
     }
   };
 
-  // Calculate total cost live
   const totalCost =
     hall && attendees && !isNaN(attendees)
       ? hall.pricePerPlate * Number(attendees)
@@ -145,6 +152,7 @@ const BookHallPage = () => {
             placeholder="Enter number of attendees"
           />
         </div>
+
         <div>
           <label className="block mb-1 font-medium">Purpose of Booking:</label>
           <select
@@ -153,9 +161,7 @@ const BookHallPage = () => {
             onChange={(e) => setPurpose(e.target.value)}
             className="w-full border rounded px-3 py-2"
           >
-            <option value="" disabled>
-              Select purpose
-            </option>
+            <option value="" disabled>Select purpose</option>
             <option value="Wedding">Wedding</option>
             <option value="Birthday">Birthday</option>
             <option value="Meeting">Meeting</option>
@@ -188,12 +194,13 @@ const BookHallPage = () => {
             rows={3}
           />
         </div>
-        {/* Total Amount Calculator */}
+
         <div className="flex items-center justify-between mt-4">
-        <div className="text-lg font-bold text-red-600">
-         Total Amount: ₹{totalCost}
-       </div>
-       </div>
+          <div className="text-lg font-bold text-red-600">
+            Total Amount: ₹{totalCost}
+          </div>
+        </div>
+
         <button
           type="submit"
           className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded"
