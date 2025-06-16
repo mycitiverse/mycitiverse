@@ -1,4 +1,5 @@
-import Button from "./ui/Button"
+import { Link } from "react-router-dom";
+import Button from "./ui/Button";
 
 export default function HeroSection() {
   return (
@@ -9,26 +10,30 @@ export default function HeroSection() {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
             MyCitiverse
           </h1>
-          <h2 className="text-2xl md:text-2xl lg:text-3xl font-bold leading-tight" style={{color: 'red'}}>
+          <h2 className="text-2xl md:text-2xl lg:text-3xl font-bold leading-tight" style={{ color: "red" }}>
             (Coming Soon)
           </h2>
-          
+
           {/* Subheading */}
           <p className="text-lg md:text-xl text-white max-w-2xl">
             One App, Every Corner of Your City
           </p>
-          
+
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-4">
-              Explore Events
-            </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-4">
-              Organize Yours
-            </Button>
+            <Link to="/events">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-4">
+                Explore Events
+              </Button>
+            </Link>
+            <Link to="/community-hall">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-8 py-4">
+                Book Your Halls
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
