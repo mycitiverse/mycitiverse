@@ -23,6 +23,8 @@ import CityUpdateDetails from "./pages/CityUpdateDetails"
 import CommunityHallDetails from "./components/CommunityHallDetails";
 import MyEvents from "./pages/MyEvents";
 import HallBookingsDashboard from "./pages/HallBookingsDashboard";
+import FeedbackButton from "./components/FeedbackButton";
+import Preloader from "./components/Preloader";
 
 function HomePage() {
   return (
@@ -38,6 +40,7 @@ function App() {
   return (
     <AuthProvider>
       <Navbar />
+      <Preloader />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/events" element={<EventsPage />} />
@@ -55,10 +58,8 @@ function App() {
         <Route path="/city-feed/:id" element={<CityUpdateDetails />} />
         <Route path="/my-events" element={<MyEvents />} />
         <Route path="/hall-dashboard" element={<HallBookingsDashboard />} />
-
-
-      
       </Routes>
+      <FeedbackButton />
       <Footer />
     </AuthProvider>
   );
