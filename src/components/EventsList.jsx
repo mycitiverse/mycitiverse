@@ -1,6 +1,6 @@
 // src/pages/EventList.jsx
 import { useEffect, useState } from "react";
-import EventCard from "../components/EventCard";
+import { EventCard } from "../components/EventCard";
 import { db } from "../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 
@@ -73,9 +73,11 @@ const EventList = () => {
               date={event.date}
               location={event.location}
               description={event.description}
-              imageUrl={event.imageUrl}
+              thumbnailUrl={event.thumbnailUrl}
               category={event.category}
+              price={event.price}
               onDelete={null} // add handler if needed
+              isUserEvent={false}
             />
           ))
         ) : (

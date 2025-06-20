@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import Button from "./ui/Button";
 
 export default function CTASection() {
@@ -34,12 +35,14 @@ export default function CTASection() {
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
+            <Link to="/login">
             <Button
               size="lg"
-              className="bg-white text-yellow-600 hover:bg-yellow-500 hover:text-white font-bold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all"
+              className="bg-white text-white hover:bg-yellow-500 hover:text-white font-bold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all"
             >
               🚀 Get Started
             </Button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

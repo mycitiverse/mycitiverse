@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';  // added useNavigate
-import { Calendar, MapPin, Tag } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
+import { useParams, useNavigate } from 'react-router-dom';
 import Button from "../components/ui/Button";
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { saveViewedCategory } from "../firebaseUsers";
 
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/styles.css";
+
 export default function EventDetails() {
   const { eventId } = useParams();
-  const navigate = useNavigate();   // initialize navigate
+  const navigate = useNavigate();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const { currentUser } = useAuth();
-
-  console.log("Logged in user:", currentUser?.uid);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -27,7 +29,6 @@ export default function EventDetails() {
           const eventData = { id: docSnap.id, ...docSnap.data() };
           setEvent(eventData);
 
-          // ✅ Save viewed category
           if (currentUser && eventData.category) {
             saveViewedCategory(currentUser.uid, eventData.category)
               .then(() => console.log("Category saved"))
@@ -67,66 +68,83 @@ export default function EventDetails() {
     );
   }
 
+  const galleryImages = [
+  ...(event.thumbnailUrl ? [event.thumbnailUrl] : []),
+  ...(Array.isArray(event.eventImageUrls) ? event.eventImageUrls : [])
+];
+
+
+
+  const lightboxSlides = galleryImages.map((url) => ({ src: url }));
+
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      {/* Back to Feed button */}
-      <Button variant="outline" onClick={() => navigate(-1)} className="mb-6">
-        ← Back to Events
-      </Button>
+  <div className="max-w-5xl mx-auto px-4 py-8">
+    <Button
+      onClick={() => navigate(-1)}
+      className="mb-4 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded shadow"
+    >
+      ← Back to List
+    </Button>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-3xl">{event.title}</CardTitle>
-          <CardDescription className="text-lg">{event.description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <img
-                src={event.imageUrl || 'https://via.placeholder.com/600x300.png?text=Event+Image'}
-                alt={event.title}
-                className="rounded-xl w-full h-64 object-cover mb-4"
-              />
-            </div>
-            <div className="space-y-6">
-              <div className="flex items-center">
-                <Calendar className="mr-2 h-5 w-5 text-muted-foreground" />
-                <div>
-                  <p className="font-medium">Date & Time</p>
-                  <p className="text-muted-foreground">
-                    {new Date(event.date).toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                    <br />
-                    {event.time}
-                  </p>
-                </div>
-              </div>
+    <h1 className="text-4xl font-bold text-gray-800 mb-2">{event.title}</h1>
+    <p className="text-gray-600 mb-4 text-lg">{event.description}</p>
 
-              <div className="flex items-center">
-                <MapPin className="mr-2 h-5 w-5 text-muted-foreground" />
-                <div>
-                  <p className="font-medium">Location</p>
-                  <p className="text-muted-foreground">{event.location}</p>
-                </div>
-              </div>
+    <p className="text-gray-500 mb-6">
+      📍<strong>{event.location}</strong> | 📅{" "}
+      <strong>
+        {new Date(event.date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long",
+        })}
+      </strong>{" "}
+      at <strong>{event.time}</strong> | 💰{" "}
+      <span className="text-green-600 font-medium">
+        {event.price && event.price > 0 ? `₹${event.price}` : "Free"}
+      </span>{" "}
+      | 🏷️ <strong>{event.category}</strong>
+    </p>
 
-              <div className="flex items-center">
-                <Tag className="mr-2 h-5 w-5 text-muted-foreground" />
-                <div>
-                  <p className="font-medium">Category</p>
-                  <p className="text-muted-foreground">{event.category}</p>
-                </div>
-              </div>
+    {/* Image Gallery */}
+    {galleryImages.length > 0 ? (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+        {galleryImages.map((url, index) => (
+          <img
+            key={index}
+            src={url}
+            alt={`img ${index + 1}`}
+            className="rounded-lg shadow-md w-full h-60 object-cover cursor-zoom-in"
+            onClick={() => {
+              setSelectedIndex(index);
+              setLightboxOpen(true);
+            }}
+          />
+        ))}
+      </div>
+    ) : (
+      <div className="mb-8 bg-gray-200 text-center text-gray-600 py-10 rounded-lg">
+        No images available
+      </div>
+    )}
 
-              <Button className="w-full">Register for Event</Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+    {/* Lightbox Viewer */}
+    {lightboxOpen && (
+      <Lightbox
+        open={lightboxOpen}
+        close={() => setLightboxOpen(false)}
+        index={selectedIndex}
+        slides={lightboxSlides}
+        plugins={[Zoom]}
+      />
+    )}
+
+    <button
+      onClick={() => navigate(`/book-event/${eventId}`)}
+      className="bg-yellow-400 hover:bg-yellow-500 text-white px-6 py-3 rounded-lg shadow-md transition"
+    >
+      📅 Register for Event
+    </button>
+  </div>
+);
 }

@@ -1,25 +1,16 @@
-import { useState, useEffect } from 'react';
-import { Label } from "/components/ui/label";
-import { Checkbox } from "/components/ui/Checkbox";
-import { Card, CardContent, CardHeader, CardTitle } from "/components/ui/card";
+import { useState, useEffect } from "react";
+import { Label } from "../components/ui/Label";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 
 export default function Filters({ onChange }) {
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  const categories = ['Music', 'Sports', 'Workshops', 'Festivals'];
-
-  const handleCheckboxChange = (category) => {
-    setSelectedFilters((prev) =>
-      prev.includes(category)
-        ? prev.filter((item) => item !== category)
-        : [...prev, category]
-    );
-  };
+  const categories = ["Music", "Sports", "Workshops", "Festivals"];
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     if (onChange) {
-      onChange(selectedFilters);
+      onChange(selectedCategory);
     }
-  }, [selectedFilters, onChange]);
+  }, [selectedCategory, onChange]);
 
   return (
     <Card className="w-full max-w-xs">
@@ -27,24 +18,30 @@ export default function Filters({ onChange }) {
         <CardTitle className="text-lg">Filter Events</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {categories.map((category) => (
-          <div key={category} className="flex items-center space-x-2">
-            <Checkbox
-              id={`filter-${category.toLowerCase()}`}
-              checked={selectedFilters.includes(category)}
-              onCheckedChange={() => handleCheckboxChange(category)}
-            />
-            <Label htmlFor={`filter-${category.toLowerCase()}`}>
-              {category}
-            </Label>
-          </div>
-        ))}
+        <div>
+          <Label htmlFor="category" className="block mb-1 font-medium">
+            Category
+          </Label>
+          <select
+            id="category"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">All Categories</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
       </CardContent>
     </Card>
   );
 }
 
-// Default onChange handler if not provided
+// Default onChange handler
 Filters.defaultProps = {
   onChange: () => {},
 };

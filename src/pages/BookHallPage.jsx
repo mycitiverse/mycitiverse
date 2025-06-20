@@ -135,6 +135,13 @@ const [errors, setErrors] = useState({
 
   return (
     <div className="max-w-xl mx-auto p-6 mt-6 bg-white rounded-xl shadow">
+      <button
+  onClick={() => navigate(`/community-hall/${id}`)}
+  className="mb-4 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded shadow"
+>
+  ← Back to Hall Page
+</button>
+
       <h2 className="text-center font-bold text-4xl mb-5">📅 Book: <span className="text-red-600">{hall.name}</span></h2>
       {hall.thumbnail && (
   <img

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import Button from "../components/ui/Button";
+import { useAuth } from "../contexts/AuthContext";
 
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
@@ -15,6 +16,7 @@ const CommunityHallDetails = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const fetchHallDetails = async () => {
@@ -36,12 +38,24 @@ const CommunityHallDetails = () => {
     fetchHallDetails();
   }, [id]);
 
+  const handleBookingClick = () => {
+    if (!currentUser) {
+      alert("Please login to book a hall.");
+      navigate("/login");
+    } else {
+      navigate(`/book-hall/${id}`);
+    }
+  };
+
   if (loading) return <div className="text-center py-10">Loading...</div>;
   if (!hall) return <div className="text-center py-10">Hall not found</div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <Button variant="outline" onClick={() => navigate(-1)} className="mb-6">
+      <Button
+      onClick={() => navigate(`/community-hall`)}
+  className="mb-4 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded shadow"
+      >
         ← Back to List
       </Button>
 
@@ -100,7 +114,7 @@ const CommunityHallDetails = () => {
       )}
 
       <button
-        onClick={() => navigate(`/book-hall/${id}`)}
+        onClick={handleBookingClick}
         className="bg-yellow-400 hover:bg-yellow-500 text-white px-6 py-3 rounded-lg shadow-md transition"
       >
         📅 Book Community Hall

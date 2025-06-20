@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Input } from '/components/ui/Input';
+import { Input } from '../components/ui/Input'; // ✅ use correct relative path
 import { Search } from 'lucide-react';
 
 export default function SearchBar({ 
@@ -11,13 +11,14 @@ export default function SearchBar({
   let timeoutId;
 
   const handleChange = (e) => {
-    const value = e.target.value;
+    // ✅ Only allow letters and spaces
+    const value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
     setQuery(value);
 
     // Clear previous timeout
     clearTimeout(timeoutId);
 
-    // Set new timeout to trigger search after delay
+    // Trigger search after delay
     timeoutId = setTimeout(() => {
       onSearch(value);
     }, delay);

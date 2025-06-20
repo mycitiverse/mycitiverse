@@ -31,6 +31,7 @@ export default function Navbar() {
     { name: 'Events', href: '/events' },
     { name: 'City Feed', href: '/city-feed' },
     { name: 'Community Halls', href: '/community-hall' },
+    ...(!currentUser ? [{ name: 'Login/Sign Up', href: '/login' }] : [])
   ];
 
   // Admin-only links
@@ -43,7 +44,10 @@ export default function Navbar() {
   ];
 
   // Add "My Bookings" for logged in users
-  const userLinks = currentUser ? [{ name: 'My Bookings', href: '/my-hall-bookings' }] : [];
+  const userLinks = currentUser ? [
+    { name: 'My Bookings', href: '/my-hall-bookings' },
+    { name: 'Profile', href: '/profile' }
+  ] : [];
 
   // Combine all links
   const navLinks = [...baseLinks, ...userLinks, ...(isAdmin ? adminLinks : [])];
@@ -71,22 +75,7 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-
-            {currentUser ? (
-              <button
-                onClick={handleLogout}
-                className="text-white bg-red-600 hover:bg-red-700 px-3 py-2 rounded-md text-l font-medium transition-colors duration-200"
-              >
-                Logout
-              </button>
-            ) : (
-              <Link
-                to="/login"
-                className="text-white hover:bg-yellow-500 px-3 py-2 rounded-md text-l font-medium transition-colors duration-200"
-              >
-                Login
-              </Link>
-            )}
+            
           </div>
 
           {/* Mobile Menu Button */}

@@ -14,9 +14,9 @@ export default function Footer() {
         >
           {/* Branding */}
           <div>
-            <h3 className="text-2xl font-bold mb-2">🎉 MyCitiverse</h3>
+            <h3 className="text-2xl font-bold mb-2">MyCitiverse</h3>
             <p className="text-gray-400 max-w-xs">
-              Discover and book the best events, community halls, and experiences in your city.
+              Discover and book the local events, community halls, and experiences in your city.
             </p>
           </div>
 
@@ -27,7 +27,7 @@ export default function Footer() {
               <li><a href="/events" className="hover:text-white transition">Explore Events</a></li>
               <li><a href="/community-hall" className="hover:text-white transition">Book a Hall</a></li>
               <li><a href="/about" className="hover:text-white transition">About Us</a></li>
-              <li><a href="/contact" className="hover:text-white transition">Contact</a></li>
+              <li><a href="/contact" className="hover:text-white transition">Contact Us</a></li>
             </ul>
           </div>
 

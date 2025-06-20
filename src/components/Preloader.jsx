@@ -22,9 +22,7 @@ export default function Preloader() {
         animate={{ scale: [1, 1.2, 1], rotate: [0, 10, -10, 0] }}
         transition={{ duration: 1.2, repeat: Infinity }}
         className="text-white text-4xl font-extrabold"
-      >
-        🎉 MyCitiverse
-      </motion.div>
+      >MyCitiverse</motion.div>
     </motion.div>
   );
 }
