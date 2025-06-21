@@ -33,6 +33,7 @@ import ForgotPassword from './auth/ForgotPassword';
 import LoginPage from './auth/LoginPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import HallOwnerDashboard from './pages/HallOwnerDashboard';
 
 
 function HomePage() {
@@ -63,7 +64,9 @@ function App() {
         <Route path="/phone-login" element={<PhoneLogin />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/about" element={<AboutPage />} />
-  <Route path="/contact" element={<ContactPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/owner-dashboard" element={<HallOwnerDashboard />} />
+
 
 
         {/* 🔒 Admin + Auth Protected */}

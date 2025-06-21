@@ -3,56 +3,58 @@ import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-12 px-4">
-      <div className="container mx-auto">
+    <footer className="bg-black text-white px-6 py-16">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+        {/* Branding */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row justify-between gap-12"
         >
-          {/* Branding */}
-          <div>
-            <h3 className="text-2xl font-bold mb-2">MyCitiverse</h3>
-            <p className="text-gray-400 max-w-xs">
-              Discover and book the local events, community halls, and experiences in your city.
-            </p>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-2">
-            <h4 className="font-semibold text-white">Quick Links</h4>
-            <ul className="text-gray-400 space-y-1 text-sm">
-              <li><a href="/events" className="hover:text-white transition">Explore Events</a></li>
-              <li><a href="/community-hall" className="hover:text-white transition">Book a Hall</a></li>
-              <li><a href="/about" className="hover:text-white transition">About Us</a></li>
-              <li><a href="/contact" className="hover:text-white transition">Contact Us</a></li>
-            </ul>
-          </div>
-
-          {/* Social Media */}
-          <div>
-            <h4 className="font-semibold text-white mb-2">Follow Us</h4>
-            <motion.div
-              className="flex space-x-5"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <a href="https://facebook.com/MyCitiverse" className="text-gray-400 hover:text-white transition"><Facebook /></a>
-              <a href="https://twitter.com/MyCitiverse" className="text-gray-400 hover:text-white transition"><Twitter /></a>
-              <a href="https://www.instagram.com/mycitiverse" className="text-gray-400 hover:text-white transition"><Instagram /></a>
-              <a href="https://www.linkedin.com/company/mycitiverse" className="text-gray-400 hover:text-white transition"><Linkedin /></a>
-              <a href="https://www.youtube.com/@MyCitiverse" className="text-gray-400 hover:text-white transition"><Youtube /></a>
-            </motion.div>
-          </div>
+          <h3 className="text-3xl font-bold mb-4">MyCitiverse</h3>
+          <p className="text-gray-400 text-sm max-w-sm leading-relaxed">
+            Discover and book local events, community halls, and exciting experiences happening around you.
+          </p>
         </motion.div>
 
-        <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-          © {new Date().getFullYear()} MyCitiverse. All rights reserved.
-        </div>
+        {/* Navigation Links */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
+          <ul className="space-y-2 text-sm text-gray-400">
+            <li><a href="/events" className="hover:text-white transition-colors">Explore Events</a></li>
+            <li><a href="/community-hall" className="hover:text-white transition-colors">Book a Hall</a></li>
+            <li><a href="/about" className="hover:text-white transition-colors">About Us</a></li>
+            <li><a href="/contact" className="hover:text-white transition-colors">Contact Us</a></li>
+          </ul>
+        </motion.div>
+
+        {/* Social Media */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+        >
+          <h4 className="text-lg font-semibold mb-3">Follow Us</h4>
+          <div className="flex items-center gap-5 text-gray-400 text-xl">
+            <a href="https://facebook.com/MyCitiverse" className="hover:text-white transition"><Facebook size={20} /></a>
+            <a href="https://twitter.com/MyCitiverse" className="hover:text-white transition"><Twitter size={20} /></a>
+            <a href="https://www.instagram.com/mycitiverse" className="hover:text-white transition"><Instagram size={20} /></a>
+            <a href="https://www.linkedin.com/company/mycitiverse" className="hover:text-white transition"><Linkedin size={20} /></a>
+            <a href="https://www.youtube.com/@MyCitiverse" className="hover:text-white transition"><Youtube size={20} /></a>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Bottom Line */}
+      <div className="mt-12 border-t border-gray-800 pt-6 text-center text-xs text-gray-500">
+        © {new Date().getFullYear()} MyCitiverse. All rights reserved.
       </div>
     </footer>
   );

@@ -2,62 +2,69 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Button from "./ui/Button";
 import Lottie from "lottie-react";
-import celebrationAnimation from "../assets/celebration.json"; // Place the JSON file inside /src/assets
+import celebrationAnimation from "../assets/celebration.json";
 
 export default function HeroSection() {
   return (
-    <section className="relative bg-gradient-to-br from-yellow-300 to-yellow-600 text-white py-24 md:py-36 overflow-hidden">
-      <div className="container mx-auto px-4">
+    <section className="relative min-h-screen bg-black text-white overflow-hidden">
+      {/* Gradient overlay or background animation */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 to-black z-0"></div>
+
+      {/* Lottie background or a future video bg placeholder */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.2 }}
+        transition={{ duration: 1 }}
+        className="absolute top-1/2 left-1/2 w-[400px] h-[400px] -translate-x-1/2 -translate-y-1/2 opacity-20 z-0"
+      >
+        <Lottie animationData={celebrationAnimation} loop={true} />
+      </motion.div>
+
+      {/* Main content */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center max-w-4xl mx-auto space-y-6">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto space-y-6 relative z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="bg-red-600 text-white text-sm px-4 py-1 rounded-full tracking-wide inline-block animate-pulse"
         >
-          {/* 🎉 Lottie Animation */}
-          <div className="w-40 md:w-56 mx-auto">
-            <Lottie animationData={celebrationAnimation} loop={true} />
-          </div>
+        Coming Soon
+        </motion.div>
 
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: -40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight drop-shadow-lg"
-          >
-            MyCitiverse 
-            <p><span className="text-red-600 text-4xl">(Coming Soon)</span></p>
-          </motion.h1>
+        <motion.h1
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight"
+        >
+          Discover Events Around You
+        </motion.h1>
 
-          {/* Subheading */}
-          <h2 className="text-xl md:text-2xl font-semibold text-indigo-500 italic">
-            Discover → Book → Celebrate
-          </h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="text-white/80 text-lg md:text-xl font-light"
+        >
+          One App, Every Corner of Your City
+        </motion.p>
 
-          {/* Tagline */}
-          <p className="text-lg md:text-xl text-white/90">
-            One App, Every Corner of Your City
-          </p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 pt-6"
-          >
-            <Link to="/events">
-              <Button className="hover:scale-105 transition-transform bg-white text-white font-bold shadow-md hover:shadow-lg px-6 py-3 rounded-full">
-                🎫 Explore Events
-              </Button>
-            </Link>
-            <Link to="/community-hall">
-              <Button className="hover:scale-105 transition-transform bg-white text-white font-bold shadow-md hover:shadow-lg px-6 py-3 rounded-full">
-                🏛️ Book Your Hall
-              </Button>
-            </Link>
-          </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          className="flex justify-center flex-wrap gap-4 pt-8"
+        >
+          <Link to="/events">
+            <Button className="text-white bg-yellow-400 font-medium px-6 py-3 rounded-full hover:bg-yellow-500 transition-all duration-300">
+            Explore Events
+            </Button>
+          </Link>
+          <Link to="/community-hall">
+            <Button className="text-white bg-yellow-400 font-medium px-6 py-3 rounded-full hover:bg-yellow-500 transition-all duration-300">
+            Book Your Hall
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

@@ -162,11 +162,14 @@ const CommunityHallPage = () => {
                 className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow duration-300 block"
               >
                 {hall.thumbnail || (hall.images && hall.images.length > 0) ? (
-                  <img
-                    src={hall.thumbnail || hall.images[0]}
-                    alt={hall.name}
-                    className="rounded-lg w-full h-48 object-cover mb-4"
-                  />
+                  <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-2">
+  <img
+    src={hall.thumbnail || hall.images[0]}
+    alt={hall.name}
+    className="absolute inset-0 w-full h-full object-cover"
+  />
+</div>
+
                 ) : (
                   <div className="w-full h-48 bg-gray-200 text-gray-600 flex items-center justify-center rounded-md mb-4 text-sm italic">
                     No Thumbnail Available

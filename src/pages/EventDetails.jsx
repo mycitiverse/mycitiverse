@@ -80,7 +80,7 @@ export default function EventDetails() {
   return (
   <div className="max-w-5xl mx-auto px-4 py-8">
     <Button
-      onClick={() => navigate(-1)}
+      onClick={() => navigate(`/events`)}
       className="mb-4 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded shadow"
     >
       ← Back to List

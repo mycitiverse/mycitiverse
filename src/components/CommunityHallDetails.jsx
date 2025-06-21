@@ -63,7 +63,21 @@ const CommunityHallDetails = () => {
       <p className="text-gray-600 mb-1 text-lg">
         📍 Location: <strong>{hall.location}</strong>
       </p>
-      <p className="text-gray-500 mb-6">
+      <p className="text-gray-500 mb-1">Full Address: <strong>{hall.address}</strong></p>
+{hall.googleMapLink && (
+  <p>
+    <a
+      href={hall.googleMapLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 underline"
+    >
+      View on Google Maps
+    </a>
+  </p>
+)}
+
+      <p className="text-gray-500 mb-1">
         👥 Capacity: <strong>{hall.capacity}</strong> | 💰{" "}
         <span className="text-green-600 font-medium">
           ₹{hall.pricePerPlate}/Plate
@@ -79,6 +93,16 @@ const CommunityHallDetails = () => {
           {hall.availability}
         </span>
       </p>
+
+      <div className="text-black mb-6">
+  <h3 className="text-lg font-semibold">Facilities:</h3>
+  <ul className="list-disc ml-5 text-gray-700">
+    {hall.facilities?.map((facility, idx) => (
+      <li key={idx}>{facility}</li>
+    ))}
+  </ul>
+</div>
+
 
       {/* Image Grid */}
       {hall.images && hall.images.length > 0 ? (

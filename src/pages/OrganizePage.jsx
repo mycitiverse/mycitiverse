@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Button from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import Textarea from "../components/ui/Textarea";
 import { Label } from "../components/ui/Label";
@@ -10,6 +9,9 @@ import { db } from "../firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { useAuth } from '../contexts/AuthContext';
 import { uploadToCloudinary } from '../utils/cloudinary';
+import Cropper from "react-easy-crop";
+import { getCroppedImg } from "../utils/cropImage"; // Make sure this util function exists
+
 
 export default function OrganizePage() {
   const { currentUser } = useAuth();
@@ -20,6 +22,8 @@ export default function OrganizePage() {
     date: '',
     time: '',
     location: '',
+    fullAddress: '',
+    googleMapLink: '',
     category: '',
     thumbnail: null,
     eventImages: [],
@@ -28,7 +32,16 @@ export default function OrganizePage() {
     maxSeats: 0,
     tags: '',
     contact: '',
+    creditTo: '',
+    isVerified: false,
   });
+
+  const [showCropper, setShowCropper] = useState(false);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedImage, setCroppedImage] = useState(null);
+
 
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -66,6 +79,21 @@ export default function OrganizePage() {
     }
   };
 
+  const handleCropConfirm = async () => {
+  try {
+    const croppedFile = await getCroppedImg(thumbnailPreview, croppedAreaPixels);
+    setFormData(prev => ({ ...prev, thumbnail: croppedFile }));
+    setCroppedImage(URL.createObjectURL(croppedFile));
+    setShowCropper(false);
+  } catch (e) {
+    console.error("Crop error:", e);
+    alert("Cropping failed. Please try again.");
+  }
+};
+
+
+
+
   const handleCategoryChange = (value) => {
     setFormData(prev => ({ ...prev, category: value }));
   };
@@ -73,10 +101,11 @@ export default function OrganizePage() {
   const handleThumbnailUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData(prev => ({ ...prev, thumbnail: file }));
-      setThumbnailPreview(URL.createObjectURL(file));
-    }
-  };
+    const imageUrl = URL.createObjectURL(file);
+    setThumbnailPreview(imageUrl);
+    setShowCropper(true);
+  }
+};
 
   const handleEventImagesUpload = (e) => {
     const files = Array.from(e.target.files).slice(0, 5);
@@ -107,23 +136,44 @@ export default function OrganizePage() {
       setUploadProgress(50);
 
       // Upload Event Images
-      const eventImageUrls = await Promise.all(
-        formData.eventImages.map(file => uploadToCloudinary(file))
-      );
+      const eventImageUrls = [];
+for (const file of formData.eventImages) {
+  try {
+    const url = await uploadToCloudinary(file);
+    eventImageUrls.push(url);
+  } catch (err) {
+    console.error("Error uploading image:", file.name, err);
+    alert("One of the event images failed to upload. Please check file size or format.");
+    setUploading(false);
+    return;
+  }
+}
+setUploadProgress(90);
+
       setUploadProgress(90);
 
       // Save to Firestore
       await addDoc(collection(db, "events"), {
-        ...formData,
-        thumbnailUrl,
-        eventImageUrls,
-        tags: formData.tags.split(',').map(tag => tag.trim()),
-        price: formData.isPaid ? Number(formData.price) : 0,
-        maxSeats: formData.isPaid ? Number(formData.maxSeats) : 0,
-        bookedUsers: [],
-        createdAt: Timestamp.now(),
-        createdBy: user.email
-      });
+  title: formData.title,
+  description: formData.description,
+  date: formData.date,
+  time: formData.time,
+  location: formData.location,
+  category: formData.category,
+  thumbnailUrl, // ✅ use uploaded URL
+  eventImageUrls, // ✅ use uploaded URLs
+  isPaid: formData.isPaid,
+  price: formData.isPaid ? Number(formData.price) : 0,
+  maxSeats: formData.isPaid ? Number(formData.maxSeats) : 0,
+  tags: formData.tags.split(',').map(tag => tag.trim()),
+  contact: formData.contact,
+  creditTo: formData.creditTo || '',
+  isVerified: formData.isVerified || false,
+  bookedUsers: [],
+  createdAt: Timestamp.now(),
+  createdBy: user?.email || "anonymous"
+});
+
 
       setUploadProgress(100);
       alert("Event saved successfully!");
@@ -135,6 +185,8 @@ export default function OrganizePage() {
         date: '',
         time: '',
         location: '',
+        fullAddress: '',
+        googleMapLink: '',
         category: '',
         thumbnail: null,
         eventImages: [],
@@ -143,6 +195,8 @@ export default function OrganizePage() {
         maxSeats: 0,
         tags: '',
         contact: '',
+        creditTo: '',
+        isVerified: false,
       });
       setThumbnailPreview('');
       setEventImagePreviews([]);
@@ -158,8 +212,8 @@ export default function OrganizePage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-2xl">Organize an Event</CardTitle>
+        <CardHeader className="flex items-center justify-center">
+          <CardTitle className="text-2xl text-center">Organize an Event</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -193,6 +247,16 @@ export default function OrganizePage() {
               <Input id="location" name="location" value={formData.location} onChange={handleChange} required />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="fullAddress">Full Address <span className="text-red-500">*</span></Label>
+              <Input id="fullAddress" name="fullAddress" value={formData.fullAddress} onChange={handleChange} required />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="googleMapLink">Google Map Link <span className="text-red-500">*</span></Label>
+              <Input id="googleMapLink" name="googleMapLink" value={formData.googleMapLink} onChange={handleChange} required />
+            </div>
+
             {/* Category */}
             <div className="space-y-2">
               <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
@@ -218,14 +282,47 @@ export default function OrganizePage() {
               </Select.Root>
             </div>
 
-            {/* Thumbnail */}
+            {/* Thumbnail Image */}
             <div className="space-y-2">
-              <Label htmlFor="thumbnail">Thumbnail Image <span className="text-red-500">*</span></Label>
-              <Input id="thumbnail" name="thumbnail" type="file" accept="image/*" onChange={handleThumbnailUpload} required />
-              {thumbnailPreview && (
-                <img src={thumbnailPreview} alt="Thumbnail Preview" className="h-20 w-20 rounded object-cover border mt-2" />
-              )}
-            </div>
+  <Label htmlFor="thumbnail">Thumbnail Image <span className="text-red-500">*</span></Label>
+  <Input id="thumbnail" name="thumbnail" type="file" accept="image/*" onChange={handleThumbnailUpload} required />
+
+  {showCropper && thumbnailPreview && (
+    <div>
+      <div className="relative w-full h-[300px] bg-black">
+        <Cropper
+          image={thumbnailPreview}
+          crop={crop}
+          zoom={zoom}
+          aspect={4 / 5}
+          onCropChange={setCrop}
+          onZoomChange={setZoom}
+          onCropComplete={(_, croppedArea) => setCroppedAreaPixels(croppedArea)}
+        />
+      </div>
+      <button type="button" onClick={handleCropConfirm} className="mt-2 px-4 py-2 bg-yellow-500 text-white rounded">
+        Crop & Save
+      </button>
+    </div>
+  )}
+
+  {croppedImage && (
+    <div className="mt-3">
+      <div className="relative w-full rounded-md overflow-hidden" style={{ paddingBottom: "125%" }}> {/* 4:5 ratio */}
+        <img
+          src={croppedImage}
+          alt="Cropped Thumbnail"
+          className="absolute top-0 left-0 w-full h-full object-cover border"
+        />
+      </div>
+      <p className="text-sm text-gray-500 mt-2">
+        <em>Final thumbnail preview (4:5 ratio)</em>
+      </p>
+    </div>
+  )}
+</div> 
+
+
 
             {/* Event Images */}
             <div className="space-y-2">
@@ -251,6 +348,35 @@ export default function OrganizePage() {
               <Label htmlFor="contact">Contact <span className="text-red-500">*</span></Label>
               <Input id="contact" name="contact" value={formData.contact} onChange={handleChange} placeholder="Phone number" maxLength={10} />
             </div>
+
+            {/* Credit To */}
+<div className="space-y-2">
+  <Label htmlFor="creditTo">Credit To</Label>
+  <Input
+    id="creditTo"
+    name="creditTo"
+    value={formData.creditTo || ''}
+    onChange={handleChange}
+    placeholder="Influencer's name or handle"
+  />
+</div>
+
+{/* Verified Badge Toggle */}
+<div className="space-y-2">
+  <Label htmlFor="isVerified">
+    <div className="flex items-center space-x-2">
+      <input
+        type="checkbox"
+        id="isVerified"
+        name="isVerified"
+        checked={formData.isVerified || false}
+        onChange={handleChange}
+      />
+      <span>Verified Creator (Blue Tick)</span>
+    </div>
+  </Label>
+</div>
+
 
             {/* Paid Option */}
             <div className="space-y-2">
@@ -278,20 +404,23 @@ export default function OrganizePage() {
 
             {/* Upload Progress */}
             {uploading && (
-              <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
-                <div className="bg-yellow-500 h-3 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
-              </div>
-            )}
-
-            {/* Submit Button */}
-            <div className="pt-4">
-              <Button type="submit" className="w-full" disabled={uploading}>
-                {uploading ? "Uploading..." : "Save Event"}
-              </Button>
+          <div className="w-full bg-gray-200 rounded-lg mb-2">
+            <div
+              className="bg-blue-500 text-xs font-bold text-white text-center p-2 rounded-lg"
+              style={{ width: `${uploadProgress}%` }}
+            >
+              Uploading: {uploadProgress}%
             </div>
+          </div>
+        )}
+
+        <button type="submit" className="w-full bg-yellow-500 text-white py-3 rounded-lg hover:bg-yellow-600" disabled={uploading}>
+          {uploading ? "Uploading..." : "Organize Event"}
+        </button>
           </form>
         </CardContent>
       </Card>
     </div>
   );
 }
+
