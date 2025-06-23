@@ -68,14 +68,11 @@ export default function EventDetails() {
     );
   }
 
-  const galleryImages = [
-  ...(event.thumbnailUrl ? [event.thumbnailUrl] : []),
-  ...(Array.isArray(event.eventImageUrls) ? event.eventImageUrls : [])
-];
+       const galleryImages = Array.isArray(event.eventImageUrls) ? event.eventImageUrls : [];
+       const lightboxSlides = galleryImages.map((url) => ({ src: url }));
 
-
-
-  const lightboxSlides = galleryImages.map((url) => ({ src: url }));
+      const isPartneredCreator =
+      event.creditTo?.toLowerCase().includes("mycitiverse") || false;
 
   return (
   <div className="max-w-5xl mx-auto px-4 py-8">
@@ -89,22 +86,31 @@ export default function EventDetails() {
     <h1 className="text-4xl font-bold text-gray-800 mb-2">{event.title}</h1>
     <p className="text-gray-600 mb-4 text-lg">{event.description}</p>
 
-    <p className="text-gray-500 mb-6">
-      📍<strong>{event.location}</strong> | 📅{" "}
-      <strong>
-        {new Date(event.date).toLocaleDateString("en-US", {
+    <div className="text-lg text-gray-700 space-y-1 mb-2">
+        <p>📍 <strong>Location:</strong> {event.location}</p>
+        <p>📌 <strong>Full Address:</strong> {event.fullAddress} |
+        🗺️ <strong>Map:</strong> <a href={event.googleMapLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View on Google Maps</a></p>
+        <p>📅 <strong>Date:</strong> {new Date(event.date).toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",
           weekday: "long",
-        })}
-      </strong>{" "}
-      at <strong>{event.time}</strong> | 💰{" "}
-      <span className="text-green-600 font-medium">
-        {event.price && event.price > 0 ? `₹${event.price}` : "Free"}
-      </span>{" "}
-      | 🏷️ <strong>{event.category}</strong>
-    </p>
+        })} |
+        ⏰ <strong>Time:</strong> {event.time} |
+        🏷️ <strong>Category:</strong> {event.category} |
+        💵 <strong>Price:</strong> {event.price > 0 ? `₹${event.price}` : "Free"} </p>
+        {event.maxSeats > 0 && <p>🪑 <strong>Max Seats:</strong> {event.maxSeats} </p>}
+        <p>📞 <strong>Contact:</strong> {event.contact} |
+        🔖 <strong>Tags:</strong> {event.tags?.length > 0 ? event.tags.join(", ") : "None"}</p>
+        <p>👤 <strong>Creator:</strong> {event.creditTo || "Anonymous"}
+          {isPartneredCreator && (
+            <span className="ml-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">MyCitiverse Partner</span>
+          )}
+          {event.isVerified && (
+            <span className="ml-2 text-blue-500">✔️</span>
+          )}
+        </p>
+      </div>
 
     {/* Image Gallery */}
     {galleryImages.length > 0 ? (

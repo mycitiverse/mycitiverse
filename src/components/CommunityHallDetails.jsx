@@ -60,29 +60,27 @@ const CommunityHallDetails = () => {
       </Button>
 
       <h1 className="text-4xl font-bold text-gray-800 mb-2">{hall.name}</h1>
-      <p className="text-gray-600 mb-1 text-lg">
-        📍 Location: <strong>{hall.location}</strong>
+      <p className="text-gray-700 mb-1 text-lg">
+        <strong>📍 Location: </strong>{hall.location}
       </p>
-      <p className="text-gray-500 mb-1">Full Address: <strong>{hall.address}</strong></p>
+      <p className="text-gray-700 text-lg mb-1"><strong>Full Address: </strong>{hall.address} |
 {hall.googleMapLink && (
-  <p>
     <a
       href={hall.googleMapLink}
       target="_blank"
       rel="noopener noreferrer"
       className="text-blue-600 underline"
-    >
-      View on Google Maps
+    > View on Google Maps
     </a>
-  </p>
-)}
+  )}
+</p>
 
-      <p className="text-gray-500 mb-1">
-        👥 Capacity: <strong>{hall.capacity}</strong> | 💰{" "}
+      <p className="text-gray-700 text-lg mb-1">
+        <strong>👥 Capacity: </strong>{hall.capacity} | 💰{" "}
         <span className="text-green-600 font-medium">
           ₹{hall.pricePerPlate}/Plate
         </span>{" "}
-        | Status:{" "}
+        | <strong>Status:</strong>{" "}
         <span
           className={
             hall.availability === "Available"
@@ -94,7 +92,7 @@ const CommunityHallDetails = () => {
         </span>
       </p>
 
-      <div className="text-black mb-6">
+      <div className="text-gray-700 text-lg mb-2">
   <h3 className="text-lg font-semibold">Facilities:</h3>
   <ul className="list-disc ml-5 text-gray-700">
     {hall.facilities?.map((facility, idx) => (

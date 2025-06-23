@@ -159,23 +159,24 @@ const CommunityHallPage = () => {
               <Link
                 to={`/community-hall/${hall.id}`}
                 key={hall.id}
-                className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow duration-300 block"
+                className="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden transition-shadow duration-300 block"
               >
                 {hall.thumbnail || (hall.images && hall.images.length > 0) ? (
-                  <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-2">
+                  <div className="relative w-full aspect-video">
   <img
     src={hall.thumbnail || hall.images[0]}
     alt={hall.name}
-    className="absolute inset-0 w-full h-full object-cover"
+    className="w-full h-full object-cover"
   />
 </div>
 
                 ) : (
-                  <div className="w-full h-48 bg-gray-200 text-gray-600 flex items-center justify-center rounded-md mb-4 text-sm italic">
+                  <div className="w-full h-48 bg-gray-200 text-gray-600 flex items-center justify-center text-sm italic">
                     No Thumbnail Available
                   </div>
                 )}
 
+              <div className="p-3">
                 <h2 className="text-xl font-semibold mb-1">{hall.name}</h2>
                 <p className="text-gray-700 mb-1">
                   📍 Location: <b>{hall.location}</b>
@@ -198,6 +199,7 @@ const CommunityHallPage = () => {
                 >
                   {hall.availability}
                 </p>
+                </div>
               </Link>
             ))
           ) : (
