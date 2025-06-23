@@ -1,5 +1,8 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom'; // Remove Router import here
+import ReactGA from "react-ga4";
+import { BrowserRouter as Router } from 'react-router-dom'; // Add if not present
+import GAListener from './components/GAListener';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -46,9 +49,21 @@ function HomePage() {
   );
 }
 
+ReactGA.initialize("G-89JFJMJH1W");
+ReactGA.event({
+  category: 'User',
+  action: 'Clicked Contact Button',
+  label: 'Contact Page'
+});
+
+
 function App() {
+  ReactGA.send({ hitType: "pageview", page: window.location.pathname });
+
   return (
     <AuthProvider>
+      <Router>
+        <GAListener /> {/* Track all route changes */}
       <Navbar />
       <Preloader />
       <Routes>
@@ -125,6 +140,7 @@ function App() {
       </Routes>
       <FeedbackButton />
       <Footer />
+      </Router>
     </AuthProvider>
   );
 }
