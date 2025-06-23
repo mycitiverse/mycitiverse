@@ -1,7 +1,6 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom'; // Remove Router import here
 import ReactGA from "react-ga4";
-import { BrowserRouter as Router } from 'react-router-dom'; // Add if not present
 import GAListener from './components/GAListener';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
@@ -62,7 +61,6 @@ function App() {
 
   return (
     <AuthProvider>
-      <Router>
         <GAListener /> {/* Track all route changes */}
       <Navbar />
       <Preloader />
@@ -140,7 +138,6 @@ function App() {
       </Routes>
       <FeedbackButton />
       <Footer />
-      </Router>
     </AuthProvider>
   );
 }
