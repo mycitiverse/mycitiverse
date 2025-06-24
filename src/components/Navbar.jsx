@@ -31,7 +31,7 @@ export default function Navbar() {
     { name: 'Events', href: '/events' },
     { name: 'City Feed', href: '/city-feed' },
     { name: 'Community Halls', href: '/community-hall' },
-    ...(!currentUser ? [{ name: 'Login/Sign Up', href: '/login' }] : [])
+    { name: 'Login/Sign Up', href: '/login' }
   ];
 
   // Admin-only links
