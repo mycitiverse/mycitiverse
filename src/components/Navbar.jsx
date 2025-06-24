@@ -31,7 +31,7 @@ export default function Navbar() {
     { name: 'Events', href: '/events' },
     { name: 'City Feed', href: '/city-feed' },
     { name: 'Community Halls', href: '/community-hall' },
-    { name: 'Login/Sign Up', href: '/login' }
+    ...(currentUser ? [] : [{ name: 'Login/Sign Up', href: '/login' }])
   ];
 
   // Admin-only links
@@ -107,7 +107,7 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              {currentUser ? (
+              {currentUser && (
                 <button
                   onClick={() => {
                     closeMenu();
@@ -116,15 +116,7 @@ export default function Navbar() {
                   className="w-full text-left text-white hover:bg-red-700 px-3 py-2 rounded-md text-base font-medium"
                 >
                   Logout
-                </button>
-              ) : (
-                <Link
-                  to="/login"
-                  onClick={closeMenu}
-                  className="block text-white hover:bg-yellow-500 px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Login
-                </Link>
+                </button>  
               )}
             </div>
           </div>

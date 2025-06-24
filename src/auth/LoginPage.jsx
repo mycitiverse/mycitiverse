@@ -101,7 +101,7 @@ export default function LoginPage() {
   console.log("Logged in user:", currentUser?.uid);
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-yellow-400 shadow mt-10 rounded">
+    <div className="max-w-md mx-auto p-6 bg-white shadow mt-10 rounded">
       {/* Company Logo */}
       <img
         src="/mylogo.png"
@@ -109,7 +109,7 @@ export default function LoginPage() {
         className="w-60 h-60 mb-4 mx-auto"
       />
 
-      <h1 className="text-3xl text-white font-bold mb-6 text-center">
+      <h1 className="text-3xl text-black font-bold mb-6 text-center">
         Login to MyCitiverse
       </h1>
 
