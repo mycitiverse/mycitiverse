@@ -11,7 +11,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     try {
       await sendPasswordResetEmail(auth, email);
-      setMessage("Reset link sent to your email.");
+      setMessage("If this email is registered, a reset link has been sent.");
     } catch (error) {
       setMessage(error.message);
     }

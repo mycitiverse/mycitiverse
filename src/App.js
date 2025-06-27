@@ -36,6 +36,10 @@ import LoginPage from './auth/LoginPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import HallOwnerDashboard from './pages/HallOwnerDashboard';
+import TermsAndConditions from "./pages/policies/TermsAndConditions";
+import PrivacyPolicy from "./pages/policies/PrivacyPolicy";
+import RefundPolicy from "./pages/policies/RefundPolicy";
+import Disclaimer from "./pages/policies/Disclaimer";
 
 
 function HomePage() {
@@ -79,6 +83,11 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/owner-dashboard" element={<HallOwnerDashboard />} />
+        <Route path="/terms" element={<TermsAndConditions />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/refund" element={<RefundPolicy />} />
+        <Route path="/disclaimer" element={<Disclaimer />} />
+
 
 
 

@@ -158,6 +158,7 @@ export default function LoginPage() {
             Sign up here
           </Link>
         </p>
+        {/*
         <p>
           Prefer phone login?{" "}
           <Link
@@ -167,6 +168,7 @@ export default function LoginPage() {
             Login via OTP
           </Link>
         </p>
+        */}
         <p>
           <a href="/forgot-password" className="text-blue-600 hover:underline">
             Forgot Password?

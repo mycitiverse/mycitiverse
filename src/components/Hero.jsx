@@ -35,9 +35,9 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight"
+          className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight"
         >
-          Discover Events Around You
+          Discover Local Events Around You
         </motion.h1>
 
         <motion.p

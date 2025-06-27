@@ -5,7 +5,7 @@ export default function Preloader() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2500); // Show for 2.5s
+    const timer = setTimeout(() => setLoading(false), 1500); // Show for 2.5s
     return () => clearTimeout(timer);
   }, []);
 

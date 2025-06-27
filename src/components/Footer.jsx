@@ -31,6 +31,10 @@ export default function Footer() {
             <li><a href="/community-hall" className="hover:text-white transition-colors">Book a Hall</a></li>
             <li><a href="/about" className="hover:text-white transition-colors">About Us</a></li>
             <li><a href="/contact" className="hover:text-white transition-colors">Contact Us</a></li>
+            <li><a href="/terms" className="hover:underline">Terms & Conditions</a></li>
+            <li><a href="/privacy" className="hover:underline">Privacy Policy</a></li>
+            <li><a href="/refund" className="hover:underline">Refund Policy</a></li>
+            <li><a href="/disclaimer" className="hover:underline">Disclaimer</a></li>
           </ul>
         </motion.div>
 
