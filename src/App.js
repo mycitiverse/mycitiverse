@@ -19,7 +19,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import AdminRoute from './components/AdminRoute';
 import CommunityHallPage from "./pages/CommunityHallPage";
 import BookHallPage from "./pages/BookHallPage";
-import MyHallBookings from "./pages/MyHallBookings";
+import MyBookings from "./pages/MyBookings";
 import CityUpdateDetails from "./pages/CityUpdateDetails"
 import CommunityHallDetails from "./components/CommunityHallDetails";
 import MyEvents from "./pages/MyEvents";
@@ -40,12 +40,19 @@ import TermsAndConditions from "./pages/policies/TermsAndConditions";
 import PrivacyPolicy from "./pages/policies/PrivacyPolicy";
 import RefundPolicy from "./pages/policies/RefundPolicy";
 import Disclaimer from "./pages/policies/Disclaimer";
+import ScrollToTop from "./components/ScrollToTop";
+import RecentlyAddedHalls from "./components/RecentlyAddedHalls";
+import RecentlyAddedEvents from "./components/RecentlyAddedEvents";
+import BookingConfirmationPage from "./pages/BookingConfirmationPage";
+import BookingScanner from "./components/BookingScanner";
 
 
 function HomePage() {
   return (
     <>
       <Hero />
+      <RecentlyAddedEvents />
+      <RecentlyAddedHalls />
       <Features />
       <CTA />
     </>
@@ -68,6 +75,7 @@ function App() {
         <GAListener /> {/* Track all route changes */}
       <Navbar />
       <Preloader />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/events" element={<EventsPage />} />
@@ -90,7 +98,6 @@ function App() {
 
 
 
-
         {/* 🔒 Admin + Auth Protected */}
         <Route path="/organize" element={
           <AdminRoute>
@@ -107,6 +114,11 @@ function App() {
             <ProtectedRoute><AddCityUpdate /></ProtectedRoute>
           </AdminRoute>
         } />
+        <Route path="/admin/scanner" element={
+          <AdminRoute>
+            <ProtectedRoute><BookingScanner /></ProtectedRoute>
+          </AdminRoute>
+        } />
 
         {/* 🔒 Authenticated Users Only */}
         <Route path="/book-hall/:id" element={
@@ -119,9 +131,9 @@ function App() {
             <BookEventPage />
           </PrivateRoute>
         } />
-        <Route path="/my-hall-bookings" element={
+        <Route path="/my-bookings" element={
           <PrivateRoute>
-            <MyHallBookings />
+            <MyBookings />
           </PrivateRoute>
         } />
         <Route path="/my-events" element={
@@ -144,6 +156,12 @@ function App() {
             <UserProfile />
           </PrivateRoute>
         } />
+        <Route path="/booking/confirmation/:bookingId" element={
+          <PrivateRoute>
+          <BookingConfirmationPage />
+          </PrivateRoute>
+        } />
+
       </Routes>
       <FeedbackButton />
       <Footer />

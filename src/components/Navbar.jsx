@@ -46,7 +46,7 @@ export default function Navbar() {
 
   // Add "My Bookings" for logged in users
   const userLinks = currentUser ? [
-    { name: 'My Bookings', href: '/my-hall-bookings' },
+    { name: 'My Bookings', href: '/my-bookings' },
     { name: 'Profile', href: '/profile' }
   ] : [];
 
@@ -54,13 +54,13 @@ export default function Navbar() {
   const navLinks = [...baseLinks, ...userLinks, ...(isAdmin ? adminLinks : [])];
 
   return (
-    <nav className="sticky top-0 z-50 bg-yellow-400 shadow-md">
+    <nav className="sticky top-0 z-50 bg-gold shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center space-x-2">
-              <img src="/mylogo.png" alt="MyCitiverse Logo" className="h-14 w-auto" />
+              <img src="/mylogo.png" alt="MyCitiverse Logo" className="h-16 w-auto" />
               <span className="text-white font-bold text-2xl">MyCitiverse</span>
             </Link>
           </div>
@@ -94,7 +94,7 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden bg-yellow-400 pb-3">
+          <div className="md:hidden bg-gold pb-3">
             <div className="px-2 pt-2 space-y-1">
               {navLinks.map((link) => (
                 <Link

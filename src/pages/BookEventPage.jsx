@@ -54,7 +54,7 @@ const BookEventPage = () => {
         return alert("You have already booked this event.");
       }
 
-      await addDoc(bookingsRef, {
+      const bookingRef = await addDoc(bookingsRef, {
         eventId: id,
         eventName: event.title,
         userId: currentUser.uid,
@@ -69,8 +69,8 @@ const BookEventPage = () => {
         createdAt: new Date(),
       });
 
-      alert("Event booking successful!");
-      navigate("/events");
+      // ✅ Navigate to confirmation page
+      navigate(`/booking/confirmation/${bookingRef.id}`);
     } catch (error) {
       console.error("Booking failed:", error);
       alert("Booking failed. Try again.");
@@ -83,12 +83,11 @@ const BookEventPage = () => {
       : 0;
 
   const isFormValid =
-  personName.trim() !== "" &&
-  contactInfo.trim().length === 10 &&
-  Number(tickets) > 0 &&
-  Number(tickets) <= event?.maxSeats &&
-  !Object.values(errors).some((e) => e);
-
+    personName.trim() !== "" &&
+    contactInfo.trim().length === 10 &&
+    Number(tickets) > 0 &&
+    Number(tickets) <= event?.maxSeats &&
+    !Object.values(errors).some((e) => e);
 
   if (!event) return <div className="p-4">Loading event details...</div>;
 
@@ -119,6 +118,7 @@ const BookEventPage = () => {
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Name */}
         <div>
           <label className="block mb-1 font-medium">Name of Person: <span className="text-red-500">*</span></label>
           <input
@@ -126,24 +126,24 @@ const BookEventPage = () => {
             required
             value={personName}
             onChange={(e) => {
-    const value = e.target.value;
-    // Allow only alphabets and space
-    if (/^[a-zA-Z\s]*$/.test(value)) {
-      setPersonName(value);
-      setErrors((prev) => ({ ...prev, personName: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        personName: "Only alphabets and spaces are allowed.",
-      }));
-    }
-  }}
+              const value = e.target.value;
+              if (/^[a-zA-Z\s]*$/.test(value)) {
+                setPersonName(value);
+                setErrors((prev) => ({ ...prev, personName: "" }));
+              } else {
+                setErrors((prev) => ({
+                  ...prev,
+                  personName: "Only alphabets and spaces are allowed.",
+                }));
+              }
+            }}
             className="w-full border rounded px-3 py-2"
             placeholder="Your full name"
           />
           {errors.personName && <p className="text-red-500 text-sm mt-1">{errors.personName}</p>}
         </div>
 
+        {/* Contact */}
         <div>
           <label className="block mb-1 font-medium">Contact Information: <span className="text-red-500">*</span></label>
           <input
@@ -151,31 +151,31 @@ const BookEventPage = () => {
             required
             value={contactInfo}
             onChange={(e) => {
-    const value = e.target.value;
-    // Allow only numbers and limit to 10 digits
-    if (/^\d{0,10}$/.test(value)) {
-      setContactInfo(value);
-      if (value.length === 10) {
-        setErrors((prev) => ({ ...prev, contactInfo: "" }));
-      } else {
-        setErrors((prev) => ({
-          ...prev,
-          contactInfo: "Phone number must be 10 digits.",
-        }));
-      }
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        contactInfo: "Only numbers are allowed.",
-      }));
-    }
-  }}
+              const value = e.target.value;
+              if (/^\d{0,10}$/.test(value)) {
+                setContactInfo(value);
+                if (value.length === 10) {
+                  setErrors((prev) => ({ ...prev, contactInfo: "" }));
+                } else {
+                  setErrors((prev) => ({
+                    ...prev,
+                    contactInfo: "Phone number must be 10 digits.",
+                  }));
+                }
+              } else {
+                setErrors((prev) => ({
+                  ...prev,
+                  contactInfo: "Only numbers are allowed.",
+                }));
+              }
+            }}
             className="w-full border rounded px-3 py-2"
             placeholder="Phone number"
           />
           {errors.contactInfo && <p className="text-red-500 text-sm mt-1">{errors.contactInfo}</p>}
         </div>
 
+        {/* Tickets */}
         <div>
           <label className="block mb-1 font-medium">Number of Tickets: <span className="text-red-500">*</span></label>
           <input
@@ -185,24 +185,24 @@ const BookEventPage = () => {
             max={event.maxSeats}
             value={tickets}
             onChange={(e) => {
-  const value = e.target.value;
-  if (/^\d*$/.test(value) && Number(value) > 0 && Number(value) <= event.maxSeats) 
-    {
-      setTickets(value);
-      setErrors((prev) => ({ ...prev, tickets: "" }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        tickets: `Please enter a valid number between 1 and ${event.maxSeats}.`,
-      }));
-    }
-}}
+              const value = e.target.value;
+              if (/^\d*$/.test(value) && Number(value) > 0 && Number(value) <= event.maxSeats) {
+                setTickets(value);
+                setErrors((prev) => ({ ...prev, tickets: "" }));
+              } else {
+                setErrors((prev) => ({
+                  ...prev,
+                  tickets: `Please enter a valid number between 1 and ${event.maxSeats}.`,
+                }));
+              }
+            }}
             className="w-full border rounded px-3 py-2"
             placeholder="Enter number of tickets"
           />
           {errors.tickets && <p className="text-red-500 text-sm mt-1">{errors.tickets}</p>}
         </div>
 
+        {/* Notes */}
         <div>
           <label className="block mb-1 font-medium">Notes / Requests:</label>
           <textarea
@@ -214,10 +214,12 @@ const BookEventPage = () => {
           />
         </div>
 
+        {/* Total Cost */}
         <div className="text-green-600 font-bold text-lg">
           Total: ₹{totalCost}
         </div>
 
+        {/* Submit */}
         <button
           type="submit"
           disabled={!isFormValid}

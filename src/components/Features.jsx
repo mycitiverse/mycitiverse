@@ -15,6 +15,7 @@ export default function FeaturesSection() {
     },
     {
       icon: <Users className="w-8 h-8 text-blue-600" />,
+      title: "Organize Your Own",
       description: "Create and manage your own events with our intuitive tools. Focus on your event, not the paperwork."
     }
   ]

@@ -3,7 +3,7 @@ import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white px-6 py-16">
+    <footer className="bg-gray-950 text-white px-6 py-16">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
         {/* Branding */}
         <motion.div
@@ -26,16 +26,20 @@ export default function Footer() {
           viewport={{ once: true }}
         >
           <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
+          <div className="grid grid-cols-2 gap-x-8">
           <ul className="space-y-2 text-sm text-gray-400">
             <li><a href="/events" className="hover:text-white transition-colors">Explore Events</a></li>
             <li><a href="/community-hall" className="hover:text-white transition-colors">Book a Hall</a></li>
             <li><a href="/about" className="hover:text-white transition-colors">About Us</a></li>
             <li><a href="/contact" className="hover:text-white transition-colors">Contact Us</a></li>
+            </ul>
+            <ul className="space-y-2 text-sm text-gray-400">
             <li><a href="/terms" className="hover:underline">Terms & Conditions</a></li>
             <li><a href="/privacy" className="hover:underline">Privacy Policy</a></li>
             <li><a href="/refund" className="hover:underline">Refund Policy</a></li>
             <li><a href="/disclaimer" className="hover:underline">Disclaimer</a></li>
           </ul>
+          </div>
         </motion.div>
 
         {/* Social Media */}
