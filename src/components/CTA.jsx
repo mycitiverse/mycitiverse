@@ -51,7 +51,7 @@ export default function CTASection() {
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <Link to={isLoggedIn ? "/dashboard" : "/login"}>
+            <Link to={isLoggedIn ? "/events" : "/login"}>
               <Button className="bg-yellow-400 text-white hover:bg-yellow-500 font-semibold px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all">
                 Get Started
               </Button>

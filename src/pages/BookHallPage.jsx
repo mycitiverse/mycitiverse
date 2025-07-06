@@ -90,7 +90,7 @@ const [errors, setErrors] = useState({
       return alert("This hall is already booked for the selected date. Please choose another day.");
     }
 
-      await addDoc(collection(db, "hallBookings"), {
+      const bookingRef = await addDoc(bookingsRef, {
         hallId: id,
         hallName: hall.name,
         userId: currentUser.uid,
@@ -107,8 +107,7 @@ const [errors, setErrors] = useState({
         status: "Confirmed",
         createdAt: new Date(),
       });
-      alert("Booking confirmed!");
-      navigate("/community-hall");
+      navigate(`/booking/confirmation/hall/${bookingRef.id}`);
     } catch (error) {
       console.error("Error booking hall:", error);
       alert("Failed to book. Try again.");

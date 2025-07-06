@@ -43,7 +43,7 @@ export default function FeedbackButton() {
       {/* Floating Button */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-4 shadow-lg z-50"
+        className="fixed bottom-6 right-6 bg-yellow-400 hover:bg-yellow-500 text-white rounded-full p-4 shadow-lg z-50"
         title="Give Feedback"
       >
         <MessageSquare className="w-5 h-5" />
@@ -91,7 +91,7 @@ export default function FeedbackButton() {
               </button>
               <button
                 onClick={handleSubmit}
-                className="bg-yellow-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-yellow-600"
+                className="bg-yellow-400 text-white font-semibold px-4 py-2 rounded-lg hover:bg-yellow-500"
               >
                 Submit
               </button>

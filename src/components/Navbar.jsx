@@ -42,6 +42,7 @@ export default function Navbar() {
     { name: 'My Events', href: '/my-events' },
     { name: 'Hall Booking Dashboard', href: '/hall-dashboard' },
     { name: 'Owner Dashboard', href: '/owner-dashboard' },
+    { name: 'Scanner', href: '/admin/scanner' },
   ];
 
   // Add "My Bookings" for logged in users

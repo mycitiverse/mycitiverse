@@ -73,7 +73,7 @@ const RecentlyAddedHalls = () => {
         <div className="mt-6 text-center">
           <Link
             to="/community-hall"
-            className="inline-block mt-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm font-medium transition"
+            className="inline-block mt-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white rounded-lg text-sm font-medium transition"
           >
             View All Community Halls
           </Link>

@@ -156,7 +156,7 @@ function App() {
             <UserProfile />
           </PrivateRoute>
         } />
-        <Route path="/booking/confirmation/:bookingId" element={
+        <Route path="/booking/confirmation/:type/:bookingId" element={
           <PrivateRoute>
           <BookingConfirmationPage />
           </PrivateRoute>

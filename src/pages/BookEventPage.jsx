@@ -70,7 +70,7 @@ const BookEventPage = () => {
       });
 
       // ✅ Navigate to confirmation page
-      navigate(`/booking/confirmation/${bookingRef.id}`);
+      navigate(`/booking/confirmation/event/${bookingRef.id}`);
     } catch (error) {
       console.error("Booking failed:", error);
       alert("Booking failed. Try again.");
