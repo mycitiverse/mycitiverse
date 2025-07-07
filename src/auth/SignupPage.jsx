@@ -141,6 +141,22 @@ const verifyOtp = async () => {
   }
 };
 
+const pingServerOnInputFocus = async () => {
+  const start = Date.now();
+
+  try {
+    await fetch("https://mycitiverse-backend.onrender.com/warmup"); // Replace with your actual backend URL
+    const duration = Date.now() - start;
+
+    if (duration > 10000) {
+      console.log("⏳ Server was asleep. Took:", duration, "ms to respond");
+    } else {
+      console.log("✅ Server is already awake. Responded in:", duration, "ms");
+    }
+  } catch (err) {
+    console.error("⚠️ Server ping failed:", err);
+  }
+};
 
 
   const handleSignup = async (e) => {
@@ -253,6 +269,7 @@ const verifyOtp = async () => {
               name="name"
               className="w-full border px-3 py-2 rounded"
               placeholder="John Doe"
+              onFocus={pingServerOnInputFocus}
               value={formData.name}
               onChange={handleChange}
               required
@@ -288,7 +305,16 @@ const verifyOtp = async () => {
       className="w-full border px-3 py-2 rounded mb-2"
       placeholder="Enter the 6-digit OTP"
       value={otp}
-      onChange={(e) => setOtp(e.target.value)}
+      maxLength={6}
+      inputMode="numeric"
+      pattern="\d{6}"
+      onChange={(e) => {
+        const value = e.target.value;
+    // Allow only digits
+    if (/^\d*$/.test(value)) {
+      setOtp(value);
+    }
+  }}
     />
     <button
       type="button"

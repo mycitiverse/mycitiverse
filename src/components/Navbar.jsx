@@ -1,29 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from "./ui/Button";
 import { Menu } from "lucide-react";
 import { Link } from 'react-router-dom';
-import { auth } from "../firebase";
-import { signOut } from "firebase/auth";
+import { db } from "../firebase";
 import { useAuth } from '../contexts/AuthContext';
 import { ADMIN_EMAILS } from '../constants/adminConfig';
+import { doc, getDoc } from 'firebase/firestore';
 
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [role, setRole] = useState(null);
   const { currentUser } = useAuth();
   const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        localStorage.removeItem("user");
-        window.location.href = "/login";
-      })
-      .catch((error) => console.error("Logout Error:", error));
-  };
+  // Fetch role from Firestore if user is logged in
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      if (currentUser) {
+        try {
+          const userRef = doc(db, "users", currentUser.uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            setRole(userSnap.data().role || "user");
+          }
+        } catch (error) {
+          console.error("Error fetching user role:", error);
+        }
+      } else {
+        setRole(null);
+      }
+    };
+
+    fetchUserRole();
+  }, [currentUser]);
 
   // Base links available to all users (logged in or not)
   const baseLinks = [
@@ -34,16 +47,33 @@ export default function Navbar() {
     ...(currentUser ? [] : [{ name: 'Login/Sign Up', href: '/login' }])
   ];
 
-  // Admin-only links
-  const adminLinks = [
-    { name: 'Add City Update', href: '/add-update' },
-    { name: 'Add Community Hall', href: '/add-hall' },
+   // Role-based links
+  const organizerLinks = role === 'organizer' ? [
+    { name: 'Event Dashboard', href: '/organizer-dashboard' },
     { name: 'Organize', href: '/organize' },
     { name: 'My Events', href: '/my-events' },
-    { name: 'Hall Booking Dashboard', href: '/hall-dashboard' },
-    { name: 'Owner Dashboard', href: '/owner-dashboard' },
+    { name: 'Scanner', href:'/admin/scanner' },
+  ] : [];
+
+  const hallOwnerLinks = role === 'hall_owner' ? [
+    { name: 'Hall Dashboard', href: '/hall-dashboard' },
+    { name: 'Add Hall', href: '/add-hall' },
+  ] : [];
+
+  const influencerLinks = role === 'influencer' ? [
+    { name: 'Add City Update', href: '/add-update' },
+  ] : [];
+
+  // Admin-only links
+  const adminLinks = isAdmin ? [
+    { name: 'Add City Update', href: '/add-update' },
+    { name: 'Add Hall', href: '/add-hall' },
+    { name: 'Organize', href: '/organize' },
+    { name: 'My Events', href: '/my-events' },
+    { name: 'Hall Dashboard', href: '/hall-dashboard' },
+    { name: 'Event Dashboard', href: '/organizer-dashboard' },
     { name: 'Scanner', href: '/admin/scanner' },
-  ];
+  ] : [];
 
   // Add "My Bookings" for logged in users
   const userLinks = currentUser ? [
@@ -52,7 +82,9 @@ export default function Navbar() {
   ] : [];
 
   // Combine all links
-  const navLinks = [...baseLinks, ...userLinks, ...(isAdmin ? adminLinks : [])];
+  const navLinks = [
+    ...baseLinks, ...userLinks, ...organizerLinks, ...hallOwnerLinks, ...influencerLinks, ...adminLinks
+  ];
 
   return (
     <nav className="sticky top-0 z-50 bg-gold shadow-md">
@@ -77,7 +109,6 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            
           </div>
 
           {/* Mobile Menu Button */}
@@ -107,18 +138,6 @@ export default function Navbar() {
                   {link.name}
                 </Link>
               ))}
-
-              {currentUser && (
-                <button
-                  onClick={() => {
-                    closeMenu();
-                    handleLogout();
-                  }}
-                  className="w-full text-left text-white hover:bg-red-700 px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Logout
-                </button>  
-              )}
             </div>
           </div>
         )}

@@ -23,7 +23,6 @@ import MyBookings from "./pages/MyBookings";
 import CityUpdateDetails from "./pages/CityUpdateDetails"
 import CommunityHallDetails from "./components/CommunityHallDetails";
 import MyEvents from "./pages/MyEvents";
-import HallBookingsDashboard from "./pages/HallBookingsDashboard";
 import FeedbackButton from "./components/FeedbackButton";
 import Preloader from "./components/Preloader";
 import BookEventPage from "./pages/BookEventPage";
@@ -45,7 +44,7 @@ import RecentlyAddedHalls from "./components/RecentlyAddedHalls";
 import RecentlyAddedEvents from "./components/RecentlyAddedEvents";
 import BookingConfirmationPage from "./pages/BookingConfirmationPage";
 import BookingScanner from "./components/BookingScanner";
-
+import OrganizerDashboard from "./components/OrganizerDashboard";
 
 function HomePage() {
   return (
@@ -90,7 +89,6 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/owner-dashboard" element={<HallOwnerDashboard />} />
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/refund" element={<RefundPolicy />} />
@@ -148,7 +146,7 @@ function App() {
         } />
         <Route path="/hall-dashboard" element={
           <PrivateRoute>
-            <HallBookingsDashboard />
+            <HallOwnerDashboard />
           </PrivateRoute>
         } />
         <Route path="/profile" element={
@@ -159,6 +157,11 @@ function App() {
         <Route path="/booking/confirmation/:type/:bookingId" element={
           <PrivateRoute>
           <BookingConfirmationPage />
+          </PrivateRoute>
+        } />
+        <Route path="/organizer-dashboard" element={
+          <PrivateRoute>
+          <OrganizerDashboard />
           </PrivateRoute>
         } />
 
