@@ -1,9 +1,10 @@
 // src/auth/SignupPage.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
+import axios from "axios";
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,33 @@ export default function SignupPage() {
     role: "",
     termsAccepted: false,
   });
+
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpMessage, setOtpMessage] = useState("");
+  const [timer, setTimer] = useState(60);
+  const [resendAvailable, setResendAvailable] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+
+  useEffect(() => {
+  let countdown;
+  if (otpSent && !resendAvailable) {
+    countdown = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(countdown);
+          setResendAvailable(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }
+
+  return () => clearInterval(countdown);
+}, [otpSent, resendAvailable]);
+
 
   const [fieldErrors, setFieldErrors] = useState({});
   const navigate = useNavigate();
@@ -78,6 +106,43 @@ export default function SignupPage() {
     }));
   };
 
+  const sendOtp = async () => {
+    if (isSendingOtp) return; // ⛔ Prevent double click
+     setIsSendingOtp(true); // 🔒 Block the button
+  try {
+    await axios.post("https://mycitiverse-backend.onrender.com/send-otp", {
+      email: formData.email,
+    });
+    setOtpSent(true);
+    setOtpVerified(false);
+    setResendAvailable(false);
+    setTimer(60);
+    setOtpMessage("OTP sent to your email.");
+  } catch (error) {
+    setOtpMessage("Failed to send OTP. Try again.");
+    console.error(error);
+    } finally {
+    setIsSendingOtp(false); // 🔓 Unblock after request is done
+  }
+};
+
+const verifyOtp = async () => {
+  try {
+    await axios.post("https://mycitiverse-backend.onrender.com/verify-otp", {
+      email: formData.email,
+      otp,
+    });
+    setOtpVerified(true);
+    setOtpMessage("✅ OTP verified! You may proceed.");
+  } catch (error) {
+    setOtpVerified(false);
+    setOtpMessage("❌ Invalid or expired OTP.");
+    console.error(error);
+  }
+};
+
+
+
   const handleSignup = async (e) => {
     e.preventDefault();
 
@@ -103,6 +168,10 @@ export default function SignupPage() {
     }
     if (!validateEmail(email)) {
       errors.email = "Email must be valid.";
+    }
+    if (!otpVerified) {
+      setOtpMessage("Please verify your email with OTP before signing up.");
+     return;
     }
     if (!validatePassword(password)) {
       errors.password =
@@ -143,6 +212,17 @@ export default function SignupPage() {
         role,
         createdAt: new Date(),
       });
+
+      // ✅ 2. Call backend to send welcome email
+    try {
+      await axios.post("https://mycitiverse-backend.onrender.com/api/sendWelcomeEmail", {
+        name,
+        email,
+      });
+    } catch (emailError) {
+      console.error("Welcome email failed to send:", emailError);
+      // Optional: show toast or alert here
+    }
 
       alert("Account created successfully!");
       navigate("/profile");
@@ -196,6 +276,67 @@ export default function SignupPage() {
             />
             {fieldErrors.email && <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>}
           </div>
+
+          {/* OTP */}
+          {otpSent && !otpVerified && (
+  <div className="mt-2">
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      Enter OTP
+    </label>
+    <input
+      type="text"
+      className="w-full border px-3 py-2 rounded mb-2"
+      placeholder="Enter the 6-digit OTP"
+      value={otp}
+      onChange={(e) => setOtp(e.target.value)}
+    />
+    <button
+      type="button"
+      onClick={verifyOtp}
+      className="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700"
+    >
+      Verify OTP
+    </button>
+    <button
+      type="button"
+      onClick={sendOtp}
+      disabled={!resendAvailable || isSendingOtp}
+      className={`px-3 py-2 rounded ${
+        resendAvailable && !isSendingOtp
+        ? "bg-yellow-400 text-white hover:bg-yellow-500" : "bg-gray-300 cursor-not-allowed text-gray-500"}`}
+    >
+      {isSendingOtp
+      ? "Sending..."
+      : resendAvailable
+      ? "Resend OTP"
+      : `Resend in ${timer}s`}
+    </button>
+  </div>
+)}
+
+{!otpSent && (
+  <button
+    type="button"
+    onClick={sendOtp}
+    disabled={isSendingOtp}
+    className={`mt-2 px-3 py-2 rounded ${
+      isSendingOtp
+        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+        : "bg-yellow-400 text-white hover:bg-yellow-500"
+    }`}
+  >
+    {isSendingOtp ? "Sending..." : "Send OTP"}
+  </button>
+)}
+
+
+{otpMessage && (
+  <p className={`text-sm mt-2 ${otpVerified ? "text-green-600" : "text-red-500"}`}>
+    {otpMessage}
+  </p>
+)}
+
+<fieldset disabled={!otpVerified} className="mt-4 space-y-4">
 
           {/* Phone */}
           <div>
@@ -322,6 +463,8 @@ export default function SignupPage() {
   )}
   </div>
 
+  </fieldset>
+
           {/* Terms */}
           <div className="flex items-center space-x-2 mt-2">
             <input
@@ -333,10 +476,10 @@ export default function SignupPage() {
             />
             <label className="text-sm text-gray-700">
               I agree to the{" "}
-              <a href="/terms" className="text-yellow-600 font-medium hover:underline">
+              <a href="/terms" className="text-yellow-500 font-medium hover:underline">
                 Terms and Conditions
               </a>
-              <span className="text-red-500">*</span>
+              <span className="text-red-500"> *</span>
             </label>
           </div>
           {fieldErrors.termsAccepted && (
@@ -346,7 +489,7 @@ export default function SignupPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-yellow-500 text-white font-semibold py-2 rounded hover:bg-yellow-600 transition duration-200 mt-2"
+            className="w-full bg-yellow-400 text-white font-semibold py-2 rounded hover:bg-yellow-500 transition duration-200 mt-2"
           >
             Sign Up
           </button>
@@ -354,7 +497,7 @@ export default function SignupPage() {
 
         <p className="text-sm text-center text-gray-600 mt-4">
           Already have an account?{" "}
-          <Link to="/login" className="text-yellow-600 font-medium hover:underline">
+          <Link to="/login" className="text-yellow-500 font-medium hover:underline">
             Log In
           </Link>
         </p>
