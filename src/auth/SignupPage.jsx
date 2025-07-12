@@ -480,9 +480,9 @@ const pingServerOnInputFocus = async () => {
   >
     <option value="">-- Select Role --</option>
     <option value="user">User</option>
-    <option value="organizer">Event Organizer</option>
+    {/* <option value="organizer">Event Organizer</option>
     <option value="hall_owner">Community Hall Owner</option>
-    <option value="influencer">Influencer</option>
+    <option value="influencer">Influencer</option> */}
   </select>
   {fieldErrors.role && (
     <p className="text-red-500 text-xs mt-1">{fieldErrors.role}</p>

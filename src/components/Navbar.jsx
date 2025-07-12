@@ -94,7 +94,9 @@ export default function Navbar() {
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center space-x-2">
               <img src="/mylogo.png" alt="MyCitiverse Logo" className="h-16 w-auto" />
-              <span className="text-white font-bold text-2xl">MyCitiverse</span>
+              <span className="text-white text-2xl text-bold">
+              MyCitiverse
+              </span>
             </Link>
           </div>
 

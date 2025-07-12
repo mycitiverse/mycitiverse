@@ -45,10 +45,20 @@ import RecentlyAddedEvents from "./components/RecentlyAddedEvents";
 import BookingConfirmationPage from "./pages/BookingConfirmationPage";
 import BookingScanner from "./components/BookingScanner";
 import OrganizerDashboard from "./components/OrganizerDashboard";
+import LaunchCelebrationModal from "./pages/LaunchCelebrationModal";
+import React from 'react';
 
 function HomePage() {
+
+const [showLaunchModal, setShowLaunchModal] = React.useState(true);
+
   return (
     <>
+
+{showLaunchModal && (
+        <LaunchCelebrationModal onClose={() => setShowLaunchModal(false)} />
+      )}
+
       <Hero />
       <RecentlyAddedEvents />
       <RecentlyAddedHalls />

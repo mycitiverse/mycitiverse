@@ -1,53 +1,32 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Button from "./ui/Button";
-import Lottie from "lottie-react";
-import celebrationAnimation from "../assets/celebration.json";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* Gradient overlay or background animation */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 to-black z-0"></div>
-
-      {/* Lottie background or a future video bg placeholder */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.2 }}
-        transition={{ duration: 1 }}
-        className="absolute top-1/2 left-1/2 w-[400px] h-[400px] -translate-x-1/2 -translate-y-1/2 opacity-20 z-0"
-      >
-        <Lottie animationData={celebrationAnimation} loop={true} />
-      </motion.div>
+    <section
+    className="relative min-h-screen bg-cover bg-center bg-no-repeat text-white overflow-hidden"
+  style={{ backgroundImage: "url('/cover.png')" }}>
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center max-w-4xl mx-auto space-y-6">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center max-w-4xl mx-auto space-y-6 pt-[360px] sm:pt-[400px] md:pt-[440px] lg:pt-[480px] xl:pt-[500px] pb-20">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
           className="bg-red-600 text-white text-sm px-4 py-1 rounded-full tracking-wide inline-block animate-pulse"
         >
-        Coming Soon
+        Work in Progress
         </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight"
+          className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight tracking-tight"
         >
-          Discover Local Events Around You
+        Discover Local Events Around You
         </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="text-white/80 text-lg md:text-xl font-light"
-        >
-          One App, Every Corner of Your City
-        </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}
