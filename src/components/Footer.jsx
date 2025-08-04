@@ -60,9 +60,16 @@ export default function Footer() {
         </motion.div>
       </div>
 
+      {/* PWA Install Guide */}
+      <div className="mt-12 text-center text-sm text-gray-400">
+      <strong>Install Our App:</strong><br />
+        Android (Chrome): Tap <em>Install App</em> from your browser menu<br />
+        iPhone (Safari): Tap <em>Share</em> → <em>Add to Home Screen</em>
+      </div>
+
       {/* Bottom Line */}
       <div className="mt-12 border-t border-gray-800 pt-6 text-center text-xs text-gray-500">
-        © {new Date().getFullYear()} MyCitiverse. All rights reserved.
+      Copyright {new Date().getFullYear()} © MyCitiverse Technologies Pvt. Ltd. All Rights Reserved.
       </div>
     </footer>
   );
