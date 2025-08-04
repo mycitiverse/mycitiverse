@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { createUserDocIfNotExists } from "./firebaseUsers";
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -24,6 +25,8 @@ root.render(
   </React.StrictMode>
 );
 
+
+serviceWorkerRegistration.register();
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

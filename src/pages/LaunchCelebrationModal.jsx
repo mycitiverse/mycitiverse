@@ -14,7 +14,7 @@ export default function LaunchCelebrationModal({ onClose }) {
       origin: { y: 0.6 },
     });
 
-    const timer = setTimeout(() => setShowPopup(false), 10000);
+    const timer = setTimeout(() => setShowPopup(false), 3000);
     return () => clearTimeout(timer);
   }, []);
 
